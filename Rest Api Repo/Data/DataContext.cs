@@ -6,9 +6,9 @@ using System.Text;
 
 namespace Rest_Api_Repo.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class DataContext : IdentityDbContext
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+        public DataContext(DbContextOptions<DataContext> options)
             : base(options)
         {
         }
