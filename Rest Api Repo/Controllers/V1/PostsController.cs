@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Rest_Api_Repo.Contracts;
 using Rest_Api_Repo.Contracts.V1;
+using Rest_Api_Repo.Contracts.V1.Requests;
+using Rest_Api_Repo.Contracts.V1.Responses;
 using Rest_Api_Repo.Domain;
 using System;
 using System.Collections.Generic;
@@ -26,6 +28,19 @@ namespace Rest_Api_Repo.Controllers.V1
         public IActionResult GetAll()
         {
             return Ok(_posts);
+        }
+
+        [HttpPost(ApiRoutes.Posts.Create)]
+        public IActionResult Create(PostRequest postRequest)
+        {
+            var post = new Post { Id = postRequest.Id };
+            if (string.IsNullOrEmpty(post.Id))
+                post.Id = Guid.NewGuid().ToString();
+            _posts.Add(post);
+            var response = new PostResponse { Id = post.Id };
+            var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.ToUriComponent()}";
+            var location = $"{baseUrl}/{ApiRoutes.Posts.Get.Replace("{postId}", post.Id)}";
+            return Created(location, response);
         }
     }
 }
