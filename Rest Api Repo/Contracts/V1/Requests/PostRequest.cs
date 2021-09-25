@@ -7,7 +7,7 @@ namespace Rest_Api_Repo.Contracts.V1.Requests
 {
     public class PostRequest
     {
-        public string Id { get; set; }
+        public string Name{ get; set; }
 
     }
 }
