@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Rest_Api_Repo.Contracts;
 using Rest_Api_Repo.Contracts.V1;
 using Rest_Api_Repo.Contracts.V1.Requests;
@@ -13,6 +15,7 @@ using System.Threading.Tasks;
 
 namespace Rest_Api_Repo.Controllers.V1
 {
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class PostsController : Controller
     {
         private readonly IPostService _postService;
@@ -28,7 +31,6 @@ namespace Rest_Api_Repo.Controllers.V1
             var post = await _postService.GetPostByIdAsync(postId);
             return Ok(post);
         }
-
 
         [HttpGet(ApiRoutes.Posts.GetAll)]
         public async Task<IActionResult> GetAllAsync()

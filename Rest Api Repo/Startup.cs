@@ -46,11 +46,14 @@ namespace Rest_Api_Repo
                 app.UseHsts();
             }
 
-            var swaggerOptions = new SwaggerOptions();
-            Configuration.GetSection(nameof(SwaggerOptions)).Bind(swaggerOptions);
             app.UseHttpsRedirection();
+
             app.UseStaticFiles();
 
+            app.UseAuthentication();
+
+            var swaggerOptions = new SwaggerOptions();
+            Configuration.GetSection(nameof(SwaggerOptions)).Bind(swaggerOptions);
             app.UseSwagger(options=> {
                 options.RouteTemplate = swaggerOptions.JsonRoute;   
             });
@@ -58,7 +61,9 @@ namespace Rest_Api_Repo
             {
                 c.SwaggerEndpoint(swaggerOptions.UiEndpoint, swaggerOptions.Description);
             });
+
             app.UseRouting();
+
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

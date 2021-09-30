@@ -21,6 +21,7 @@ namespace Rest_Api_Repo.Installers
             services.AddDefaultIdentity<IdentityUser>()
                 .AddEntityFrameworkStores<DataContext>();
             services.AddScoped<IPostService, PostService>();
+            //services.AddSingleton<IPostService, CosmosPostService>();
         }
     }
 }

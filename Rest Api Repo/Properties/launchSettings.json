@@ -2,19 +2,24 @@
   "iisSettings": {
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
+    "iis": {
+      "applicationUrl": "http://localhost/Rest Api Repo",
+      "sslPort": 0
+    },
     "iisExpress": {
-      "applicationUrl": "http://localhost:55450",
+      "applicationUrl": "http://localhost:8080",
       "sslPort": 44329
     }
   },
   "profiles": {
     "Rest_Api_Repo": {
-      "commandName": "Project",
+      "commandName": "IISExpress",
       "launchBrowser": true,
       "launchUrl": "swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
+      "nativeDebugging": false,
       "applicationUrl": "https://localhost:5001;http://localhost:5000"
     }
   }
