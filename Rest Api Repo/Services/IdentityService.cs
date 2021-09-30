@@ -23,14 +23,37 @@ namespace Rest_Api_Repo.Services
             _jwtSettings = jwtSettings;
         }
 
-        public async Task<AuthenticationResult> RegisterAsync(string email, string password)
+        public async Task<AuthenticationResult> LoginAsync(string email, string password)
         {
-            var existingUser = await _userManager.FindByEmailAsync(email);
-            if(!(existingUser is null))
+            var user = await _userManager.FindByEmailAsync(email);
+
+            if(user is null)
             {
                 return new AuthenticationResult
                 {
-                    Errors = new[] {"User with this email already exists"}
+                    Errors = new[] { "User does not exist" }
+                };
+            }
+
+            var userHasValidEmail = await _userManager.CheckPasswordAsync(user, password);
+
+            if(!userHasValidEmail)
+                return new AuthenticationResult
+                {
+                    Errors = new[] { "User/Password combination is wrong" }
+                };
+
+            return GenerateAuthenticationResultForUser(user);
+        }
+
+        public async Task<AuthenticationResult> RegisterAsync(string email, string password)
+        {
+            var existingUser = await _userManager.FindByEmailAsync(email);
+            if (!(existingUser is null))
+            {
+                return new AuthenticationResult
+                {
+                    Errors = new[] { "User with this email already exists" }
                 };
             }
 
@@ -51,6 +74,11 @@ namespace Rest_Api_Repo.Services
                 };
             }
 
+            return GenerateAuthenticationResultForUser(newUser);
+        }
+
+        private AuthenticationResult GenerateAuthenticationResultForUser(IdentityUser newUser)
+        {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_jwtSettings.Secret);
             var tokenDescriptor = new SecurityTokenDescriptor
@@ -69,7 +97,7 @@ namespace Rest_Api_Repo.Services
 
             return new AuthenticationResult
             {
-                Token = tokenHandler.WriteToken(token), 
+                Token = tokenHandler.WriteToken(token),
                 Success = true
             };
         }
