@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Rest_Api_Repo.Services
 {
-    public class CosmosPostService : IPostService
+    public class CosmosPostService /*: IPostService*/
     {
         private readonly ICosmosDbService<Post> _cosmosDbService;
 
@@ -38,6 +38,11 @@ namespace Rest_Api_Repo.Services
         public async Task<bool> UpdatePostAsync(Post postToUpdate)
         {
             return await _cosmosDbService.UpdateAsync(postToUpdate.Id.ToString(), postToUpdate);
+        }
+
+        public bool UserOwnsPost(Guid id, string v)
+        {
+            throw new NotImplementedException();
         }
     }
 }

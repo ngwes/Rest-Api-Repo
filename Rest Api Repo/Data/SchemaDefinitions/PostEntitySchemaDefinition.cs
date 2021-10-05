@@ -15,6 +15,12 @@ namespace Rest_Api_Repo.Data.SchemaDefinitions
             builder.ToTable("Post", DataContext.DefaultSchema);
             builder.HasKey(p => p.Id);
             builder.Property(p => p.Name);
+            
+            builder
+                .HasOne(p => p.User)
+                .WithMany()
+                .HasForeignKey(p=>p.UserId);
+                
         }
     }
 }

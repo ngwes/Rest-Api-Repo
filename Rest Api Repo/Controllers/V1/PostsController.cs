@@ -1,16 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Rest_Api_Repo.Contracts;
 using Rest_Api_Repo.Contracts.V1;
 using Rest_Api_Repo.Contracts.V1.Requests;
 using Rest_Api_Repo.Contracts.V1.Responses;
-using Rest_Api_Repo.Data;
 using Rest_Api_Repo.Domain;
+using Rest_Api_Repo.Extensions;
 using Rest_Api_Repo.Services;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Rest_Api_Repo.Controllers.V1
@@ -26,7 +23,7 @@ namespace Rest_Api_Repo.Controllers.V1
         }
 
         [HttpGet(ApiRoutes.Posts.Get)]
-        public async Task<IActionResult> GetAsync([FromRoute]Guid postId)
+        public async Task<IActionResult> GetAsync([FromRoute] Guid postId)
         {
             var post = await _postService.GetPostByIdAsync(postId);
             return Ok(post);
@@ -35,14 +32,22 @@ namespace Rest_Api_Repo.Controllers.V1
         [HttpGet(ApiRoutes.Posts.GetAll)]
         public async Task<IActionResult> GetAllAsync()
         {
-            
+
             return Ok(await _postService.GetPostsAsync());
         }
 
         [HttpPut(ApiRoutes.Posts.Update)]
-        public async Task<IActionResult> UpdatePostAsync( [FromBody] UpdatePostRequest request)
+        public async Task<IActionResult> UpdatePost([FromRoute] Guid postId, [FromBody] UpdatePostRequest request)
         {
-            var updated = await _postService.UpdatePostAsync(new Post { Id = request.Id, Name = request.Name });
+
+            var userOwnsPost = await _postService.UserOwnsPostAsync(postId, HttpContext.GetUserId());
+            if (!userOwnsPost)
+                return BadRequest(new { errors = "you don't own this post" });
+
+            var post = await _postService.GetPostByIdAsync(postId);
+            post.Name = request.Name;
+            var updated = await _postService.UpdatePostAsync(post);
+
             if (updated)
                 return Ok();
             else
@@ -52,6 +57,10 @@ namespace Rest_Api_Repo.Controllers.V1
         [HttpDelete(ApiRoutes.Posts.Delete)]
         public async Task<IActionResult> DeleteAsync([FromRoute] Guid postId)
         {
+            var userOwnsPost = await _postService.UserOwnsPostAsync(postId, HttpContext.GetUserId());
+            if (!userOwnsPost)
+                return BadRequest(new { errors = "you don't own this post" });
+
             var deleted = await _postService.DeletePostAsync(postId);
             if (deleted)
                 return NoContent();
@@ -64,9 +73,10 @@ namespace Rest_Api_Repo.Controllers.V1
         {
             var post = new Post
             {
-                Name = postRequest.Name
+                Name = postRequest.Name,
+                UserId = HttpContext.GetUserId()
             };
-           
+
             await _postService.CreatePostAsync(post);
             var response = new PostResponse { Id = post.Id };
             var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.ToUriComponent()}";

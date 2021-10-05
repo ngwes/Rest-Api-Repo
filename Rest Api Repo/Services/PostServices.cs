@@ -55,5 +55,15 @@ namespace Rest_Api_Repo.Services
 
             return updatedCount > 0;
         }
+
+        public async Task<bool> UserOwnsPostAsync(Guid postId, string userId)
+        {
+            var post = await _dataContext.Posts
+                .AsNoTracking()
+                .SingleOrDefaultAsync(p => p.Id.Equals(postId));
+            if (post is null)
+                return false;
+            return post.UserId.Equals(userId);
+        }
     }
 }
