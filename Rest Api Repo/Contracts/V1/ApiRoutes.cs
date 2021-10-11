@@ -23,6 +23,7 @@ namespace Rest_Api_Repo.Contracts.V1
         public static class Identity
         {
             public const string Login = Base + "/identity/login";
+            public const string Refresh = Base + "/identity/refresh";
             public const string Register = Base + "/identity/register"; 
         }
     }

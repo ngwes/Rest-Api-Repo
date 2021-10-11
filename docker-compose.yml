@@ -1,32 +1,28 @@
-version: "3.7"
+version: '3.4'
+
 services:
-    db:
-      container_name: db
-      image: mcr.microsoft.com/mssql/server:2017-CU8-ubuntu
-      ports:
-      - "1433:1433"
-      networks:
-        - my_network
-      env_file:
-        - ./db.env
-      volumes:
-      - .\data:/var/opt/mssql/data
-
-
-    rest_api:
-      container_name: rest_api
-      build:
-        context: .
-        dockerfile: ../Rest Api Repo/Dockerfile
-      env_file:
+  restapirepo:
+    image: ${DOCKER_REGISTRY-}restapirepo
+    build:
+      context: .
+      dockerfile: Rest Api Repo/Dockerfile
+    env_file:
         - api.env
-      networks:
+    networks:
         - my_network
-      ports:
+    ports:
         - 5000:5000
-      depends_on:
-        - db
-
+  sqldb:
+    container_name: sqldb
+    image: mcr.microsoft.com/mssql/server:2017-CU8-ubuntu
+    ports:
+    - "1433:1433"
+    networks:
+    - my_network
+    env_file:
+    - ./db.env
+    volumes:
+    - .\data:/var/opt/mssql/data
     # cosmosdb:
     #     container_name: cosmosdb
     #     image: mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator
@@ -50,3 +46,4 @@ services:
 networks:
   my_network:
       driver: bridge
+

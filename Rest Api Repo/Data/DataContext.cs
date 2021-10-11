@@ -12,13 +12,17 @@ namespace Rest_Api_Repo.Data
     {
         public const string DefaultSchema  = "post";
         public DbSet<Post> Posts { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
         public DataContext(DbContextOptions<DataContext> options)
             : base(options)
         {
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfiguration(new PostEntitySchemaDefinition());
+            modelBuilder
+                .ApplyConfiguration(new PostEntitySchemaDefinition())
+                .ApplyConfiguration(new RefreshTokenSchemaDefinition());
+
             base.OnModelCreating(modelBuilder);
         }
     }

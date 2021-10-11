@@ -45,7 +45,7 @@ namespace Rest_Api_Repo.Services
 
         public async Task<List<Post>> GetPostsAsync()
         {
-            return await _dataContext.Posts.ToListAsync();
+            return await _dataContext.Posts.Include(x=>x.User).ToListAsync();
         }
 
         public async Task<bool> UpdatePostAsync(Post postToUpdate)

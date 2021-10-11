@@ -8,6 +8,7 @@ using Rest_Api_Repo.Domain;
 using Rest_Api_Repo.Extensions;
 using Rest_Api_Repo.Services;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Rest_Api_Repo.Controllers.V1
@@ -26,14 +27,15 @@ namespace Rest_Api_Repo.Controllers.V1
         public async Task<IActionResult> GetAsync([FromRoute] Guid postId)
         {
             var post = await _postService.GetPostByIdAsync(postId);
-            return Ok(post);
+            return Ok(new PostResponse { Name = post.Name, UserId = post.UserId, Id = post.Id });
         }
 
         [HttpGet(ApiRoutes.Posts.GetAll)]
         public async Task<IActionResult> GetAllAsync()
         {
 
-            return Ok(await _postService.GetPostsAsync());
+            return Ok((await _postService.GetPostsAsync())
+                .Select(x=>new PostResponse { Name = x.Name, UserId = x.UserId, Id = x.Id}));
         }
 
         [HttpPut(ApiRoutes.Posts.Update)]
@@ -78,7 +80,7 @@ namespace Rest_Api_Repo.Controllers.V1
             };
 
             await _postService.CreatePostAsync(post);
-            var response = new PostResponse { Id = post.Id };
+            var response = new PostResponse { Id = post.Id , Name = post.Name, UserId = post.UserId};
             var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.ToUriComponent()}";
             var location = $"{baseUrl}/{ApiRoutes.Posts.Get.Replace("{postId}", post.Id.ToString())}";
             return Created(location, response);
