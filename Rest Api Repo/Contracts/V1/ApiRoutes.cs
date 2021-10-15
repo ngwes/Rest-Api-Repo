@@ -10,21 +10,31 @@ namespace Rest_Api_Repo.Contracts.V1
         public const string Root = "api";
         public const string Version = "v1";
 
-        public const string Base = Root +"/"+ Version;
+        public const string Base = Root + "/" + Version;
         public static class Posts
         {
-            public const string GetAll = Base + "/posts";
-            public const string Get = Base + "/posts/{postId}";
-            public const string Create = Base + "/posts";
-            public const string Update = Base + "/posts/{postId}";
-            public const string Delete = Base + "/posts/{postId}";
+            public const string PostBase = Base + "/posts";
+            public const string GetAll = "";
+            public const string Get = "{postId}";
+            public const string Create = "";
+            public const string Update = "{postId}";
+            public const string Delete = "{postId}";
         }
-
+        public static class Tags
+        {
+            public const string TagsBase = Base + "/tags";
+            public const string GetAll = "";
+            public const string Get = "{tagId}";
+            public const string Create = "";
+            public const string Update = "{tagId}";
+            public const string Delete = "{tagId}";
+        }
         public static class Identity
         {
-            public const string Login = Base + "/identity/login";
-            public const string Refresh = Base + "/identity/refresh";
-            public const string Register = Base + "/identity/register"; 
+            public const string IdentityBase = Base + "/identity";
+            public const string Login = "login";
+            public const string Refresh = "refresh";
+            public const string Register = "register";
         }
     }
 }
