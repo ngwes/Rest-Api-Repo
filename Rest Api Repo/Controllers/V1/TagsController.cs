@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Rest_Api_Repo.Controllers.V1
 {
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
     [Route(ApiRoutes.Tags.TagsBase)]
     [ApiController]
     public class TagsController : ControllerBase
@@ -26,7 +26,7 @@ namespace Rest_Api_Repo.Controllers.V1
 
 
         [HttpGet(ApiRoutes.Tags.GetAll)]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = "WorksForGoogle")]
         public async Task<IActionResult> GetAll()
         {
             var response = (await _tagService.GetTagsAsync())
