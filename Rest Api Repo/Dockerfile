@@ -11,10 +11,10 @@ COPY ["Rest Api Repo/Rest Api Repo.csproj", "Rest Api Repo/"]
 RUN dotnet restore "Rest Api Repo/Rest Api Repo.csproj"
 COPY . .
 WORKDIR "/src/Rest Api Repo"
-RUN dotnet build "Rest Api Repo.csproj" -c Release -o /app/build
+RUN dotnet build "Rest Api Repo.csproj"  -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "Rest Api Repo.csproj" -c Release -o /app/publish
+RUN dotnet publish "Rest Api Repo.csproj"  -o /app/publish
 
 FROM base AS final
 WORKDIR /app

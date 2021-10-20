@@ -16,18 +16,8 @@ namespace Rest_Api_Repo
     {
         public static void /*async Task*/ Main(string[] args)
         {
-            //var host = CreateHostBuilder(args).Build();
-            //using (var serviceScope = host.Services.CreateScope())
-            //{
-            //    var env = serviceScope.ServiceProvider.GetRequiredService<IWebHostEnvironment>();
-            //    if (env.IsDevelopment())
-            //    {
-            //        var dbContext = serviceScope.ServiceProvider.GetRequiredService<DataContext>();
-            //        await dbContext.Database.MigrateAsync();
-            //    }
-            //}
+            
             CreateHostBuilder(args).Build().Run();
-            //host.Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>

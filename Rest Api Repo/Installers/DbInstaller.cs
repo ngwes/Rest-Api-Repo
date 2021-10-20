@@ -19,9 +19,11 @@ namespace Rest_Api_Repo.Installers
                 options.UseSqlServer(
                     configuration.GetConnectionString("DefaultConnection")));
             services.AddDefaultIdentity<IdentityUser>()
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<DataContext>();
             services.AddScoped<IPostService, PostService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<ITagService, TagService>();
             //services.AddSingleton<IPostService, CosmosPostService>();
         }
     }

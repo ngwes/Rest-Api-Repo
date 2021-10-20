@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 
 namespace Rest_Api_Repo.Controllers.V1
 {
+    [Route(ApiRoutes.Identity.IdentityBase)]
+    [ApiController]
     public class IdentityController : Controller
     {
         private readonly IIdentityService _identityService;

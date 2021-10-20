@@ -37,7 +37,10 @@ namespace Rest_Api_Repo
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, DataContext dataContext)
+        public void Configure(IApplicationBuilder app,
+            IWebHostEnvironment env,
+            DataContext dataContext,
+            RoleManager<IdentityRole> roleManager)
         {
             if (env.IsDevelopment())
             {
@@ -63,7 +66,8 @@ namespace Rest_Api_Repo
             {
                 c.SwaggerEndpoint(swaggerOptions.UiEndpoint, swaggerOptions.Description);
             });
-            ExecuteMigrations(app, env, dataContext);
+            ExecuteMigrations(env, dataContext);
+            CreateAdminAsync(roleManager).GetAwaiter().GetResult();
             app.UseRouting();
 
             app.UseAuthorization();
@@ -74,7 +78,31 @@ namespace Rest_Api_Repo
             });
         }
 
-        private void ExecuteMigrations(IApplicationBuilder app, IWebHostEnvironment env, DataContext dataContext)
+
+        private async Task CreateAdminAsync(RoleManager<IdentityRole> roleManager) {
+
+            var retry = Policy.Handle<Exception>()
+                .WaitAndRetryAsync(new TimeSpan[]
+                {
+                    TimeSpan.FromSeconds(2),
+                    TimeSpan.FromSeconds(6),
+                    TimeSpan.FromSeconds(12)
+                });
+            await retry.ExecuteAsync(async ()=> { 
+
+                if (!await roleManager.RoleExistsAsync("Admin"))
+                {
+                    var adminRole = new IdentityRole("Admin");
+                    await roleManager.CreateAsync(adminRole);
+                }
+                if (!await roleManager.RoleExistsAsync("Poster"))
+                {
+                    var posterRole = new IdentityRole("Poster");
+                    await roleManager.CreateAsync(posterRole);
+                }
+            });
+        }
+        private void ExecuteMigrations(IWebHostEnvironment env, DataContext dataContext)
         {
             if (env.EnvironmentName == "Testing") return;
 
@@ -88,6 +116,7 @@ namespace Rest_Api_Repo
 
             retry.Execute(() =>
                 dataContext.Database.Migrate());
+                
         }
     }
 }

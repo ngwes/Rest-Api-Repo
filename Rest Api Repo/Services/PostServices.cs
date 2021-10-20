@@ -38,14 +38,22 @@ namespace Rest_Api_Repo.Services
             return deleted > 0;
         }
 
+        
+
         public async Task<Post> GetPostByIdAsync(Guid id)
         {
-            return await _dataContext.Posts.SingleOrDefaultAsync(p => p.Id.Equals(id));
+            return await _dataContext.Posts
+                .Include(p=>p.PostTags).ThenInclude(pt=>pt.Tag)
+                .Include(p=>p.User)
+                .SingleOrDefaultAsync(p => p.Id.Equals(id));
         }
 
         public async Task<List<Post>> GetPostsAsync()
         {
-            return await _dataContext.Posts.Include(x=>x.User).ToListAsync();
+            return await _dataContext.Posts
+                .Include(p=>p.PostTags).ThenInclude(pt => pt.Tag)
+                .Include(x=>x.User)
+                .ToListAsync();
         }
 
         public async Task<bool> UpdatePostAsync(Post postToUpdate)

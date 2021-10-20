@@ -47,7 +47,11 @@ namespace Rest_Api_Repo.Installers
                     x.SaveToken = true;
                     x.TokenValidationParameters = tokenAuthenticationParameters;
                 });
-            
+            services.AddAuthorization(options=> {
+                options.AddPolicy("TagViewer", builder => {
+                    builder.RequireClaim("tags.view","true");
+                });
+            });
             services.AddSwaggerGen(c => {
                 c.SwaggerDoc("v1", new OpenApiInfo
                 {

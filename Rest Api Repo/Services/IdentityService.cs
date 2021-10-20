@@ -149,6 +149,7 @@ namespace Rest_Api_Repo.Services
                 UserName = email
             };
 
+
             //password here will go through Microsoft password hasher
             var createdUser = await _userManager.CreateAsync(newUser, password);
 
@@ -159,6 +160,7 @@ namespace Rest_Api_Repo.Services
                     Errors = createdUser.Errors.Select(x => x.Description)
                 };
             }
+            //await _userManager.AddClaimAsync(newUser, new Claim("tag.view", "true"));
 
             return await GenerateAuthenticationResultForUserAsync(newUser);
         }
@@ -167,15 +169,24 @@ namespace Rest_Api_Repo.Services
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_jwtSettings.Secret);
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(claims: new[]
+            var claims = new List<Claim> 
                 {
                     new Claim(JwtRegisteredClaimNames.Sub, user.Email),
                     new Claim(JwtRegisteredClaimNames.Email, user.Email),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                     new Claim("id", user.Id),
-                }),
+                };
+
+            //Add user claims to token
+            var userClaims = await _userManager.GetClaimsAsync(user);
+            claims.AddRange(userClaims);
+            //Add user roles to token
+            var userRoles = await _userManager.GetRolesAsync(user);
+            claims.AddRange(userRoles.Select(role => new Claim(ClaimTypes.Role, role)));
+
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(claims: claims),
                 Expires = DateTime.UtcNow.AddMinutes(5),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
             };

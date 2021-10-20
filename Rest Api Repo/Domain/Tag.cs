@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 
 namespace Rest_Api_Repo.Domain
 {
-    public class Post
+    public class Tag
     {
         public Guid Id { get; set; }
-        public string Name { get; set; }
-        public IdentityUser User {get;set;}
+        public string TagName { get; set; }
         public IList<PostTag> PostTags { get; set; }
-        public string UserId {get;set;}
+        public string UserCreatorId { get; set; }
+        public IdentityUser UserCreator { get; set; }
+        public DateTime CreatedAt{ get; set; }
     }
 }

@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Rest_Api_Repo.Data;
 
-namespace Rest_Api_Repo.Data.Migrations
+namespace Rest_Api_Repo.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20211005165830_AddRefreshToken")]
-    partial class AddRefreshToken
+    [Migration("20211015153631_firstmigration")]
+    partial class firstmigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -240,6 +240,21 @@ namespace Rest_Api_Repo.Data.Migrations
                     b.ToTable("Post","post");
                 });
 
+            modelBuilder.Entity("Rest_Api_Repo.Domain.PostTag", b =>
+                {
+                    b.Property<Guid>("PostId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("TagId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("PostId", "TagId");
+
+                    b.HasIndex("TagId");
+
+                    b.ToTable("PostTag","post");
+                });
+
             modelBuilder.Entity("Rest_Api_Repo.Domain.RefreshToken", b =>
                 {
                     b.Property<string>("Token")
@@ -268,6 +283,28 @@ namespace Rest_Api_Repo.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("RefreshToken","post");
+                });
+
+            modelBuilder.Entity("Rest_Api_Repo.Domain.Tag", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("TagName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Tag","post");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -328,7 +365,29 @@ namespace Rest_Api_Repo.Data.Migrations
                         .HasForeignKey("UserId");
                 });
 
+            modelBuilder.Entity("Rest_Api_Repo.Domain.PostTag", b =>
+                {
+                    b.HasOne("Rest_Api_Repo.Domain.Post", "Post")
+                        .WithMany("PostTags")
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Rest_Api_Repo.Domain.Tag", "Tag")
+                        .WithMany("PostTags")
+                        .HasForeignKey("TagId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Rest_Api_Repo.Domain.RefreshToken", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("Rest_Api_Repo.Domain.Tag", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
                         .WithMany()
