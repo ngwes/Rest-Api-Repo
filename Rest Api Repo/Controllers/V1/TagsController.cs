@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Rest_Api_Repo.Contracts.V1;
@@ -18,10 +19,12 @@ namespace Rest_Api_Repo.Controllers.V1
     public class TagsController : ControllerBase
     {
         private readonly ITagService _tagService;
+        private readonly IMapper _mapper;
 
-        public TagsController(ITagService tagService)
+        public TagsController(ITagService tagService, IMapper mapper)
         {
             _tagService = tagService;
+            _mapper = mapper;
         }
 
 
@@ -29,12 +32,7 @@ namespace Rest_Api_Repo.Controllers.V1
         [Authorize(Policy = "WorksForGoogle")]
         public async Task<IActionResult> GetAll()
         {
-            var response = (await _tagService.GetTagsAsync())
-                .Select(t => new TagsResponse {
-                    Id = t.Id,
-                    TagName = t.TagName
-                });
-            return Ok(response);
+            return Ok(_mapper.Map<List<TagsResponse>>(await _tagService.GetTagsAsync()));
         }
     }
 }

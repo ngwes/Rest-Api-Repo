@@ -5,13 +5,8 @@ using System.Threading.Tasks;
 
 namespace Rest_Api_Repo.Contracts.V1.Responses
 {
-    public class PostResponse
+    public class ResponseTag
     {
-        public Guid Id { get; set; }
         public string Name { get; set; }
-        public string UserId { get; set; }
-
-        public IEnumerable<ResponseTag> Tags { get; set; }
-
     }
 }

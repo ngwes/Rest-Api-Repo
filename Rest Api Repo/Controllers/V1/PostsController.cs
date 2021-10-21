@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Rest_Api_Repo.Contracts.V1;
@@ -21,36 +22,29 @@ namespace Rest_Api_Repo.Controllers.V1
     {
         private readonly IPostService _postService;
         private readonly ITagService _tagService;
+        private readonly IMapper _mapper;
 
-        public PostsController(IPostService postService, ITagService tagService)
+        public PostsController(IPostService postService, ITagService tagService, IMapper mapper)
         {
             _postService = postService;
             _tagService = tagService;
+            _mapper = mapper;
         }
 
         [HttpGet(ApiRoutes.Posts.Get)]
         public async Task<IActionResult> GetAsync([FromRoute] Guid postId)
         {
             var post = await _postService.GetPostByIdAsync(postId);
-            return Ok(new PostResponse { 
-                Name = post.Name,
-                UserId = post.UserId,
-                Id = post.Id, 
-                Tags = post.PostTags.Select(t => t.Tag.TagName).ToList() 
-            });
+            var response =  _mapper.Map<PostResponse>(post);
+            return Ok(response);
         }
 
         [HttpGet(ApiRoutes.Posts.GetAll)]
         public async Task<IActionResult> GetAllAsync()
         {
-
-            return Ok((await _postService.GetPostsAsync())
-                .Select(x=>new PostResponse {
-                    Name = x.Name,
-                    UserId = x.UserId,
-                    Id = x.Id,
-                    Tags = x.PostTags.Select(t=>t.Tag.TagName).ToList()
-                }));
+            var posts = await _postService.GetPostsAsync();
+            var response = _mapper.Map<List<PostResponse>>(posts);
+            return Ok(response);
         }
 
         [HttpPut(ApiRoutes.Posts.Update)]
@@ -124,7 +118,7 @@ namespace Rest_Api_Repo.Controllers.V1
             }).ToList();
 
             await _postService.CreatePostAsync(post);
-            var response = new PostResponse { Id = post.Id , Name = post.Name, UserId = post.UserId};
+            var response = _mapper.Map<PostResponse>(post);
             var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.ToUriComponent()}";
             var location = $"{baseUrl}/{ApiRoutes.Posts.Get.Replace("{postId}", post.Id.ToString())}";
             return Created(location, response);
