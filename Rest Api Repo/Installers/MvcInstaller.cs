@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -27,7 +28,9 @@ namespace Rest_Api_Repo.Installers
             services.AddScoped<IIdentityService, IdentityService>();
             services.AddControllers();
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+            services
+                .AddFluentValidation(config=>config.RegisterValidatorsFromAssemblyContaining<Startup>())
+                .AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
             var tokenAuthenticationParameters = new TokenValidationParameters
             {
                 ValidateIssuerSigningKey = true,
