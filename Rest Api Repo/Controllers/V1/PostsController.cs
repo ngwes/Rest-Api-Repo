@@ -31,6 +31,11 @@ namespace Rest_Api_Repo.Controllers.V1
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// Get a Post by Id
+        /// </summary>
+        /// <param name="postId"></param>
+        /// <returns></returns>
         [HttpGet(ApiRoutes.Posts.Get)]
         public async Task<IActionResult> GetAsync([FromRoute] Guid postId)
         {
@@ -38,7 +43,10 @@ namespace Rest_Api_Repo.Controllers.V1
             var response =  _mapper.Map<PostResponse>(post);
             return Ok(response);
         }
-
+        /// <summary>
+        /// Get All posts
+        /// </summary>
+        /// <returns></returns>
         [HttpGet(ApiRoutes.Posts.GetAll)]
         public async Task<IActionResult> GetAllAsync()
         {
@@ -47,6 +55,12 @@ namespace Rest_Api_Repo.Controllers.V1
             return Ok(response);
         }
 
+        /// <summary>
+        /// Update a post and optionally its tags, provided the post Id
+        /// </summary>
+        /// <param name="postId"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPut(ApiRoutes.Posts.Update)]
         public async Task<IActionResult> UpdatePost([FromRoute] Guid postId, [FromBody] UpdatePostRequest request)
         {
@@ -80,7 +94,12 @@ namespace Rest_Api_Repo.Controllers.V1
             else
                 return NotFound();
         }
-
+        /// <summary>
+        /// Delete a post provided its Id
+        /// </summary>
+        /// <param name="postId"></param>
+        /// <returns></returns>
+        [Authorize(Roles ="Admin")]
         [HttpDelete(ApiRoutes.Posts.Delete)]
         public async Task<IActionResult> DeleteAsync([FromRoute] Guid postId)
         {
@@ -94,7 +113,11 @@ namespace Rest_Api_Repo.Controllers.V1
             else
                 return NotFound();
         }
-
+        /// <summary>
+        /// Create a post with optional tags
+        /// </summary>
+        /// <param name="postRequest"></param>
+        /// <returns></returns>
         [HttpPost(ApiRoutes.Posts.Create)]
         public async Task<IActionResult> CreateAsync(PostRequest postRequest)
         {
