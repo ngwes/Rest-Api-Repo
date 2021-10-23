@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Restful_SDK\Restful_SDK.csproj" />
+    <ProjectReference Include="..\Restful_SDK\RestApi_SDK.csproj" />
   </ItemGroup>
 
 </Project>

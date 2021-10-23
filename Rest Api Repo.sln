@@ -7,13 +7,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rest Api Repo", "Rest Api R
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{CE166B79-2FA0-443E-AC2B-9C17DB727C6F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Restfull_IntegrationTest", "Restfull_IntegrationTest\Restfull_IntegrationTest.csproj", "{6907959B-9506-46D9-BBC2-B3038A7FA77B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestApi_IntegrationTest", "Restfull_IntegrationTest\RestApi_IntegrationTest.csproj", "{6907959B-9506-46D9-BBC2-B3038A7FA77B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Restful_SDK", "Restful_SDK\Restful_SDK.csproj", "{C3C69D57-DF92-46DD-9E2A-7E7A714A0BFF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestApi_SDK", "Restful_SDK\RestApi_SDK.csproj", "{C3C69D57-DF92-46DD-9E2A-7E7A714A0BFF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestFul_SDK_Sample", "RestFul_SDK_Sample\RestFul_SDK_Sample.csproj", "{856D8A3E-5365-4609-A151-ACF409E67EE0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestApi_SDK_Sample", "RestFul_SDK_Sample\RestApi_SDK_Sample.csproj", "{856D8A3E-5365-4609-A151-ACF409E67EE0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Restful_Contracts", "Restful_Contracts\Restful_Contracts.csproj", "{2BC20DB5-3C16-44D4-A0C5-421A092BB52E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestApi_Contracts", "Restful_Contracts\RestApi_Contracts.csproj", "{2BC20DB5-3C16-44D4-A0C5-421A092BB52E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

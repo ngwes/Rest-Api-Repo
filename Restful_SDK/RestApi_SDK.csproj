@@ -9,7 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Restful_Contracts\Restful_Contracts.csproj" />
+    <ProjectReference Include="..\Restful_Contracts\RestApi_Contracts.csproj" />
   </ItemGroup>
 
 </Project>
