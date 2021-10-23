@@ -63,4 +63,8 @@
     <Folder Include="Data\Migrations\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Restful_Contracts\Restful_Contracts.csproj" />
+  </ItemGroup>
+
 </Project>

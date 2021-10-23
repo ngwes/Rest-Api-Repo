@@ -1,5 +1,4 @@
-﻿using Rest_Api_Repo.Domain;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace Rest_Api_Repo.Contracts.V1.Requests
