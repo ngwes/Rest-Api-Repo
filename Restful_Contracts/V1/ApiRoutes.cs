@@ -20,6 +20,15 @@ namespace Rest_Api_Repo.Contracts.V1
             public const string Update = "{postId}";
             public const string Delete = "{postId}";
         }
+        public static class Comments
+        {
+            public const string CommentsBase = Base + "/comments";
+            public const string GetAll = "";
+            public const string Get = "{commentId}";
+            public const string Create = "";
+            public const string Update = "{commentId}";
+            public const string Delete = "{commentId}";
+        }
         public static class Tags
         {
             public const string TagsBase = Base + "/tags";

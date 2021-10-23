@@ -7,7 +7,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Rest_Api_Repo.Authorization;
-using Rest_Api_Repo.Options;
+using Rest_Api_Repo.Configurations;
+using Rest_Api_Repo.Configurations;
 using Rest_Api_Repo.Services;
 using System;
 using System.Collections.Generic;
@@ -22,9 +23,11 @@ namespace Rest_Api_Repo.Installers
         public void InstallServices(IServiceCollection services, IConfiguration configuration)
         {
             var jwtSettings = new JwtSettings();
-
+            var apiKeySettings = new ApiKeySettings();
+            configuration.Bind(nameof(ApiKeySettings), apiKeySettings);
             configuration.Bind(nameof(JwtSettings), jwtSettings);
             services.AddSingleton(jwtSettings);
+            services.AddSingleton(apiKeySettings);
             services.AddScoped<IIdentityService, IdentityService>();
             services.AddControllers();
 

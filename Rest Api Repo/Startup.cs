@@ -13,7 +13,7 @@ using Microsoft.OpenApi.Models;
 using Polly;
 using Rest_Api_Repo.Data;
 using Rest_Api_Repo.Installers;
-using Rest_Api_Repo.Options;
+using Rest_Api_Repo.Configurations;
 using System;
 using System.Collections.Generic;
 using System.Linq;

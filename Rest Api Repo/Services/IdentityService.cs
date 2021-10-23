@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Rest_Api_Repo.Data;
 using Rest_Api_Repo.Domain;
-using Rest_Api_Repo.Options;
+using Rest_Api_Repo.Configurations;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
