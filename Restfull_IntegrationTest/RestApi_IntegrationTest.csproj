@@ -25,7 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Rest Api Repo\Rest Api Repo\Rest Api Repo.csproj" />
+    <ProjectReference Include="..\Rest Api Repo\Rest Api Repo.csproj" />
   </ItemGroup>
 
 </Project>

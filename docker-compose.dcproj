@@ -23,6 +23,7 @@
     <DockerServiceName>restapirepo</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>
+    <None Include="cache.env" />
     <None Include="api.env" />
     <None Include="db.env" />
     <None Include="docker-compose.override.yml">

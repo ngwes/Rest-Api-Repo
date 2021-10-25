@@ -15,5 +15,6 @@ namespace Rest_Api_Repo.Extensions
 
             return context.User.Claims.Single(x => x.Type.Equals("id")).Value;
         }
+
     }
 }

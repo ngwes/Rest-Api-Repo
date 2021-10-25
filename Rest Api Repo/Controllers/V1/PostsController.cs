@@ -7,6 +7,7 @@ using Rest_Api_Repo.Contracts.V1.Requests;
 using Rest_Api_Repo.Contracts.V1.Responses;
 using Rest_Api_Repo.Domain;
 using Rest_Api_Repo.Extensions;
+using Rest_Api_Repo.Filters;
 using Rest_Api_Repo.Services;
 using System;
 using System.Collections.Generic;
@@ -48,6 +49,7 @@ namespace Rest_Api_Repo.Controllers.V1
         /// </summary>
         /// <returns></returns>
         [HttpGet(ApiRoutes.Posts.GetAll)]
+        [Cache(10)]
         public async Task<IActionResult> GetAllAsync()
         {
             var posts = await _postService.GetPostsAsync();

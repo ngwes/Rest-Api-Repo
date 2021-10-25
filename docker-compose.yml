@@ -23,6 +23,16 @@ services:
     - ./db.env
     volumes:
     - .\data:/var/opt/mssql/data
+  cache:
+    container_name: cachedb
+    image: redis:alpine
+    networks:
+    - my_network
+    env_file:
+    - cache.env
+    ports:
+    - 6379:6379
+    
     # cosmosdb:
     #     container_name: cosmosdb
     #     image: mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator
