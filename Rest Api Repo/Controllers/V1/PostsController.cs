@@ -8,7 +8,10 @@ using Rest_Api_Repo.Contracts.V1.Responses;
 using Rest_Api_Repo.Domain;
 using Rest_Api_Repo.Extensions;
 using Rest_Api_Repo.Filters;
+using Rest_Api_Repo.Helpers;
 using Rest_Api_Repo.Services;
+using RestApi_Contracts.V1.Queries;
+using RestApi_Contracts.V1.Responses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,12 +27,14 @@ namespace Rest_Api_Repo.Controllers.V1
         private readonly IPostService _postService;
         private readonly ITagService _tagService;
         private readonly IMapper _mapper;
+        private readonly IUriService _uriService;
 
-        public PostsController(IPostService postService, ITagService tagService, IMapper mapper)
+        public PostsController(IPostService postService, ITagService tagService, IMapper mapper, IUriService uriService)
         {
             _postService = postService;
             _tagService = tagService;
             _mapper = mapper;
+            _uriService = uriService;
         }
 
         /// <summary>
@@ -42,7 +47,7 @@ namespace Rest_Api_Repo.Controllers.V1
         {
             var post = await _postService.GetPostByIdAsync(postId);
             var response =  _mapper.Map<PostResponse>(post);
-            return Ok(response);
+            return Ok(new Response<PostResponse>(response));
         }
         /// <summary>
         /// Get All posts
@@ -50,11 +55,29 @@ namespace Rest_Api_Repo.Controllers.V1
         /// <returns></returns>
         [HttpGet(ApiRoutes.Posts.GetAll)]
         [Cache(10)]
-        public async Task<IActionResult> GetAllAsync()
+        public async Task<IActionResult> GetAllAsync([FromQuery]PaginationQuery query)
         {
-            var posts = await _postService.GetPostsAsync();
+            var pagination = _mapper.Map<PaginationFilter>(query);
+            var posts = await _postService.GetPostsAsync(pagination);
             var response = _mapper.Map<List<PostResponse>>(posts);
-            return Ok(response);
+            var paginationResponse = new PagedResponse<PostResponse>(response);
+            if(pagination is null || pagination.PageNumber < 1 || pagination.PageSize < 1)
+                return Ok(paginationResponse);
+
+            paginationResponse = PaginationHelper.CreatePaginatedPostResponse(_uriService, pagination, response);
+
+            //var nextPage =
+            //    pagination.PageNumber >=1 ?
+            //    _uriService.GetAllPostUrl(new PaginationFilter(pagination).AddAPage()).ToString()
+            //    : null;
+            //var previousPage = pagination.PageNumber - 1 >= 1 ? 
+            //    _uriService.GetAllPostUrl(new PaginationFilter(pagination).RemoveAPage()).ToString()
+            //    : null;
+            //paginationResponse.NextPage = response.Any() ? nextPage : null;
+            //paginationResponse.PreviousPage = previousPage;
+            //paginationResponse.PageNumber = pagination.PageNumber >= 1 ? pagination.PageNumber : (int?)null;
+            //paginationResponse.PageSize = pagination.PageSize >= 1 ? pagination.PageSize : (int?)null;
+            return Ok(paginationResponse);
         }
 
         /// <summary>
@@ -144,9 +167,12 @@ namespace Rest_Api_Repo.Controllers.V1
 
             await _postService.CreatePostAsync(post);
             var response = _mapper.Map<PostResponse>(post);
-            var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.ToUriComponent()}";
-            var location = $"{baseUrl}/{ApiRoutes.Posts.Get.Replace("{postId}", post.Id.ToString())}";
-            return Created(location, response);
+            //var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.ToUriComponent()}";
+            //var location = $"{baseUrl}/{ApiRoutes.Posts.Get.Replace("{postId}", post.Id.ToString())}";
+
+            var location = _uriService.GetPostUri(post.Id.ToString());
+
+            return Created(location, new Response<PostResponse>(response));
         }
     }
 }

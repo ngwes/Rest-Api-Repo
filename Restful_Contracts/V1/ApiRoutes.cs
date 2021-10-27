@@ -7,10 +7,10 @@ namespace Rest_Api_Repo.Contracts.V1
 {
     public static class ApiRoutes
     {
-        public const string Root = "api";
-        public const string Version = "v1";
+        private const string Root = "api";
+        private const string Version = "v1";
 
-        public const string Base = Root + "/" + Version;
+        private const string Base = Root + "/" + Version;
         public static class Posts
         {
             public const string PostBase = Base + "/posts";

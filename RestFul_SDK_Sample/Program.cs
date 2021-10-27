@@ -11,7 +11,7 @@ namespace RestFul_SDK_Sample
     {
         static async Task Main(string[] args)
         {
-            var apiUrl = "https://localhost:44329/";
+            var apiUrl = "http://localhost:58465/";
             var cachedToken = string.Empty;
 
             var identityApi = RestService.For<IIdentityApi>(apiUrl);
@@ -19,9 +19,10 @@ namespace RestFul_SDK_Sample
                 AuthorizationHeaderValueGetter = ()=> Task.FromResult(cachedToken)
             });
 
-            var registerResponse = await identityApi.RegisterAsync(new UserRegistrationRequest {
+            var registerResponse = await identityApi.RegisterAsync(new UserRegistrationRequest
+            {
                 Email = "sdkAccount@gmail.com",
-                Password ="Pa$$word1"
+                Password = "Pa$$word1"
             });
 
             var loginResponse = await identityApi.LoginAsync(new UserLoginRequest { 
@@ -49,7 +50,7 @@ namespace RestFul_SDK_Sample
                     NewTags = new List<string> { "#sampleUpdateTag" },
                     ExistingTags = new List<Guid>()
                 });
-            var getAllPostResponse = await postApi.GetAllPostsAsync();
+            var getAllPostResponse = await postApi.GetAllPostsAsync(pageNumber:1,pageSize:1);
             var deletePostResponse = await postApi.DeletePostAsync(getPostResponse.Content.Id);
 
         }

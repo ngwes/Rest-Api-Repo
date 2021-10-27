@@ -1,6 +1,7 @@
 ﻿using Refit;
 using Rest_Api_Repo.Contracts.V1.Requests;
 using Rest_Api_Repo.Contracts.V1.Responses;
+using RestApi_Contracts.V1.Responses;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -12,7 +13,7 @@ namespace Restful_SDK
     public interface IPostApi
     {
         [Get("/api/v1/posts")]
-        Task<ApiResponse<List<PostResponse>>> GetAllPostsAsync();
+        Task<ApiResponse<PagedResponse<PostResponse>>> GetAllPostsAsync([AliasAs("pageSize")]int pageSize, [AliasAs("pageNumber")]int pageNumber);
 
         [Get("/api/v1/posts/{postId}")]
         Task<ApiResponse<PostResponse>> GetPostAsync(Guid postId);

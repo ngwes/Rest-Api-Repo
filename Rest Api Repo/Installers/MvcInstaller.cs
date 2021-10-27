@@ -29,7 +29,9 @@ namespace Rest_Api_Repo.Installers
             services.AddSingleton(jwtSettings);
             services.AddSingleton(apiKeySettings);
             services.AddScoped<IIdentityService, IdentityService>();
-            services.AddControllers();
+            services.AddControllers()
+                .AddJsonOptions(options=>
+                options.JsonSerializerOptions.PropertyNamingPolicy = null);
 
             services
                 .AddFluentValidation(config=>config.RegisterValidatorsFromAssemblyContaining<Startup>())
@@ -64,8 +66,7 @@ namespace Rest_Api_Repo.Installers
                 });
             });
             services.AddSingleton<IAuthorizationHandler, WorksForCompanyHandler>();
-
-            
+            services.AddSingleton<IUriService, UriService>();
         }
     }
 }

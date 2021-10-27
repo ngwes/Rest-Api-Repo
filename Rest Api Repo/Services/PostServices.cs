@@ -48,12 +48,24 @@ namespace Rest_Api_Repo.Services
                 .SingleOrDefaultAsync(p => p.Id.Equals(id));
         }
 
-        public async Task<List<Post>> GetPostsAsync()
+        public async Task<List<Post>> GetPostsAsync(PaginationFilter paginationFilter = null)
         {
+            if(paginationFilter is null)
+                return await _dataContext.Posts
+                    .Include(p=>p.PostTags).ThenInclude(pt => pt.Tag)
+                    .Include(x=>x.User)
+                    .ToListAsync();
+            var skip = paginationFilter.PageNumber * paginationFilter.PageSize;
+            if (skip <= 0)
+                return new List<Post>();
+
             return await _dataContext.Posts
-                .Include(p=>p.PostTags).ThenInclude(pt => pt.Tag)
-                .Include(x=>x.User)
-                .ToListAsync();
+                    .Include(p => p.PostTags).ThenInclude(pt => pt.Tag)
+                    .Include(x => x.User)
+                    .Skip(skip)
+                    .Take(paginationFilter.PageSize)
+                    .ToListAsync();
+
         }
 
         public async Task<bool> UpdatePostAsync(Post postToUpdate)

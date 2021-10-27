@@ -12,7 +12,7 @@ namespace Rest_Api_Repo.Services
         Task<bool> CreatePostAsync(Post post);
         Task<bool> DeletePostAsync(Guid postId);
         Task<Post> GetPostByIdAsync(Guid id);
-        Task<List<Post>> GetPostsAsync();
+        Task<List<Post>> GetPostsAsync(PaginationFilter paginationFilter);
         Task<bool> UpdatePostAsync(Post postToUpdate);
         Task<bool> UserOwnsPostAsync(Guid id, string v);
     }
