@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Rest_Api_Repo.Configurations;
 using Rest_Api_Repo.Services;
+using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +22,9 @@ namespace Rest_Api_Repo.Installers
             {
                 return;
             }
+
+            //services.AddSingleton<IConnectionMultiplexer>(_ =>
+            //    ConnectionMultiplexer.Connect(redisSettings.ConnectionString));
 
             services.AddStackExchangeRedisCache(options=> {
                 options.Configuration = redisSettings.ConnectionString;

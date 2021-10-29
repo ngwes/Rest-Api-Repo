@@ -18,6 +18,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using RestApi_Contracts.HealtCheck;
+using Rest_Api_Repo.Extensions;
+using Microsoft.AspNetCore.Http;
 
 namespace Rest_Api_Repo
 {
@@ -51,7 +55,25 @@ namespace Rest_Api_Repo
             {
                 app.UseHsts();
             }
-
+            app.UseHealthChecks("/health", new HealthCheckOptions
+            {
+                ResponseWriter = async (context, report) =>
+                {
+                    context.Response.ContentType = "application/json";
+                    var response = new HealthCheckResponse
+                    {
+                        Status = report.Status.ToString(),
+                        Checks = report.Entries.Select(x => new HealthCheck
+                        {
+                            Component = x.Key,
+                            Status = x.Value.Status.ToString(),
+                            Description = x.Value.Description ?? "healthy",
+                        }),
+                        Duration = report.TotalDuration
+                    };
+                    await context.Response.Body.WriteAsync(response.ToByte());
+                }
+            });
             app.UseHttpsRedirection();
 
             app.UseStaticFiles();
