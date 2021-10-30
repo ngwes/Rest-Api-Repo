@@ -13,6 +13,7 @@ namespace Rest_Api_Repo.MappingProfiles
         public RequestToDomainProfile()
         {
             CreateMap<PaginationQuery, PaginationFilter>();
+            CreateMap<GetAllPostsQuery, GetAllPostFilter>();
         }
     }
 }

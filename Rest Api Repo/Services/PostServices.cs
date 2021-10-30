@@ -48,24 +48,34 @@ namespace Rest_Api_Repo.Services
                 .SingleOrDefaultAsync(p => p.Id.Equals(id));
         }
 
-        public async Task<List<Post>> GetPostsAsync(PaginationFilter paginationFilter = null)
+        public async Task<List<Post>> GetPostsAsync(GetAllPostFilter filter, PaginationFilter paginationFilter = null)
         {
-            if(paginationFilter is null)
-                return await _dataContext.Posts
-                    .Include(p=>p.PostTags).ThenInclude(pt => pt.Tag)
-                    .Include(x=>x.User)
-                    .ToListAsync();
-            var skip = paginationFilter.PageNumber * paginationFilter.PageSize;
-            if (skip <= 0)
-                return new List<Post>();
+            var queryable = _dataContext.Posts
+                .Include(p => p.PostTags).ThenInclude(pt => pt.Tag)
+                .Include(x => x.User)
+                .AsQueryable();
 
-            return await _dataContext.Posts
-                    .Include(p => p.PostTags).ThenInclude(pt => pt.Tag)
-                    .Include(x => x.User)
+            if (paginationFilter is null)
+                return await queryable.ToListAsync();
+
+            var skip = paginationFilter.PageNumber <= 1 ? 0 : paginationFilter.PageNumber * paginationFilter.PageSize;
+            if (skip < 0)
+                return new List<Post>();
+            
+            queryable = AddFilterOnQuery(filter, queryable);
+
+            return await queryable
                     .Skip(skip)
                     .Take(paginationFilter.PageSize)
                     .ToListAsync();
 
+        }
+
+        private static IQueryable<Post> AddFilterOnQuery(GetAllPostFilter filter, IQueryable<Post> queryable)
+        {
+            if (!string.IsNullOrEmpty(filter?.UserId))
+                queryable = queryable.Where(p => p.UserId.Equals(filter.UserId));
+            return queryable;
         }
 
         public async Task<bool> UpdatePostAsync(Post postToUpdate)

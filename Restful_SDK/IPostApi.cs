@@ -13,7 +13,7 @@ namespace Restful_SDK
     public interface IPostApi
     {
         [Get("/api/v1/posts")]
-        Task<ApiResponse<PagedResponse<PostResponse>>> GetAllPostsAsync([AliasAs("pageSize")]int pageSize, [AliasAs("pageNumber")]int pageNumber);
+        Task<ApiResponse<PagedResponse<PostResponse>>> GetAllPostsAsync([AliasAs("pageSize")]int pageSize, [AliasAs("pageNumber")]int pageNumber, [AliasAs("userId")] string userId = null);
 
         [Get("/api/v1/posts/{postId}")]
         Task<ApiResponse<PostResponse>> GetPostAsync(Guid postId);
