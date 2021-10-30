@@ -2,6 +2,7 @@
 using Rest_Api_Repo.Contracts.V1;
 using Rest_Api_Repo.Contracts.V1.Requests;
 using Rest_Api_Repo.Contracts.V1.Responses;
+using RestApi_Contracts.V1.Responses;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -24,8 +25,8 @@ namespace Restfull_IntegrationTest
 
             var responseContent = await response.Content.ReadAsStringAsync();
             var responseEntity = JsonConvert
-                .DeserializeObject<PostResponse>(responseContent);
-            return responseEntity;
+                .DeserializeObject<Response<PostResponse>>(responseContent);
+            return responseEntity.Data;
         }
 
         public async static Task<HttpClient> AuthenticateAsync(this HttpClient client)

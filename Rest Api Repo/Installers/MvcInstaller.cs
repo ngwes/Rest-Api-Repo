@@ -8,7 +8,6 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Rest_Api_Repo.Authorization;
 using Rest_Api_Repo.Configurations;
-using Rest_Api_Repo.Configurations;
 using Rest_Api_Repo.Services;
 using System;
 using System.Collections.Generic;

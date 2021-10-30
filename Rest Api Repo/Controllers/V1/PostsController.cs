@@ -142,7 +142,7 @@ namespace Rest_Api_Repo.Controllers.V1
                         UserCreatorId = HttpContext.GetUserId(),
                         TagName = t,
                         CreatedAt = DateTime.UtcNow
-                });
+                }).ToList();
             var existingTags = _tagService.GetTagsById(postRequest.ExistingTags);
             var postTags = tags.Concat(existingTags).ToList();
             var post = new Post

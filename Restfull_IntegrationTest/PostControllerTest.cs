@@ -5,6 +5,7 @@ using Rest_Api_Repo.Contracts.V1;
 using Rest_Api_Repo.Contracts.V1.Requests;
 using Rest_Api_Repo.Contracts.V1.Responses;
 using Rest_Api_Repo.Domain;
+using RestApi_Contracts.V1.Responses;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -33,9 +34,9 @@ namespace Restfull_IntegrationTest
             var response = await client.GetAsync(url);
             response.EnsureSuccessStatusCode();
             var responseContent = await response.Content.ReadAsStringAsync();
-            var responseEntity = JsonConvert.DeserializeObject<List<PostResponse>>(responseContent);
+            var responseEntity = JsonConvert.DeserializeObject<PagedResponse<PostResponse>>(responseContent);
             //Assert
-            responseEntity.Should().BeEmpty(); 
+            responseEntity.Data.Should().BeEmpty(); 
         }
 
 
@@ -45,18 +46,18 @@ namespace Restfull_IntegrationTest
 
             //Arrange
             var client = await _factory.CreateClient().AuthenticateAsync();
-            var response = await client.CreatePostAsync(new PostRequest { Name = Guid.NewGuid().ToString(), NewTags = new List<string> { Guid.NewGuid().ToString() } });
+            var response = await client.CreatePostAsync(new PostRequest { Name = Guid.NewGuid().ToString(), ExistingTags = new List<Guid>(), NewTags = new List<string> {$"#{Guid.NewGuid().ToString("N")}" } });
             var url = $"{ApiRoutes.Posts.PostBase}/{ApiRoutes.Posts.Get}";
             //Act
             var PostResponse = await client.GetAsync(url.Replace("{postId}",response.Id.ToString()));
             PostResponse.EnsureSuccessStatusCode();
             var responseContent = await PostResponse.Content.ReadAsStringAsync();
-            var responseEntity = JsonConvert.DeserializeObject<PostResponse>(responseContent);
+            var responseEntity = JsonConvert.DeserializeObject<Response<PostResponse>>(responseContent);
 
             //Assert
-            responseEntity.Should().NotBeNull();
-            responseEntity.Id.Should().Be(response.Id);
-            responseEntity.Name.Should().Be(response.Name);
+            responseEntity.Data.Should().NotBeNull();
+            responseEntity.Data.Id.Should().Be(response.Id);
+            responseEntity.Data.Name.Should().Be(response.Name);
 
         }
 
@@ -66,19 +67,17 @@ namespace Restfull_IntegrationTest
 
             //Arrange
             var client = await _factory.CreateClient().AuthenticateAsync();
-            var response = await client.CreatePostAsync(new PostRequest { Name = Guid.NewGuid().ToString(), NewTags = new List<string> { Guid.NewGuid().ToString() } });
+            var response = await client.CreatePostAsync(new PostRequest { Name = Guid.NewGuid().ToString(), ExistingTags = new List<Guid>(), NewTags = new List<string> { $"#{Guid.NewGuid().ToString("N")}" } });
             var url = $"{ApiRoutes.Posts.PostBase}/{ApiRoutes.Posts.Get}";
             //Act
             var PostResponse = await client.GetAsync(url.Replace("{postId}", response.Id.ToString()));
             PostResponse.EnsureSuccessStatusCode();
             var responseContent = await PostResponse.Content.ReadAsStringAsync();
-            var responseEntity = JsonConvert.DeserializeObject<PostResponse>(responseContent);
+            var responseEntity = JsonConvert.DeserializeObject<Response<PostResponse>>(responseContent);
 
             //Assert
-            responseEntity.Tags.Should().NotBeNull();
-            responseEntity.Tags.Should().NotBeEmpty();
-
-
+            responseEntity.Data.Tags.Should().NotBeNull();
+            responseEntity.Data.Tags.Should().NotBeEmpty();
         }
 
     }

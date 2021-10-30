@@ -23,9 +23,6 @@ namespace Rest_Api_Repo.Installers
                 return;
             }
 
-            //services.AddSingleton<IConnectionMultiplexer>(_ =>
-            //    ConnectionMultiplexer.Connect(redisSettings.ConnectionString));
-
             services.AddStackExchangeRedisCache(options=> {
                 options.Configuration = redisSettings.ConnectionString;
             });

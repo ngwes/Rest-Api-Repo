@@ -2,10 +2,13 @@
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Rest_Api_Repo.Data;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace Restfull_IntegrationTest
@@ -21,9 +24,14 @@ namespace Restfull_IntegrationTest
             var db = scopedServices.GetRequiredService<DataContext>();
             var set = db.Set<T>();
             set.RemoveRange(set);
+            db.SaveChanges();
         }
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
+            
+            var config = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json").Build();
             builder
                 .UseEnvironment("Testing")
                 .UseSolutionRelativeContentRoot("")
@@ -32,7 +40,7 @@ namespace Restfull_IntegrationTest
                     var options = new DbContextOptionsBuilder<DataContext>()
                     .UseInMemoryDatabase(Guid.NewGuid().ToString())
                     .Options;
-
+                    
                     services.AddScoped<DataContext>(serviceProvider => new DataContext(options));
 
                     var sp = services.BuildServiceProvider();
@@ -40,7 +48,8 @@ namespace Restfull_IntegrationTest
                     var scopedServices = scope.ServiceProvider;
                     var db = scopedServices.GetRequiredService<DataContext>();
                     db.Database.EnsureCreated();
-                });
+                })
+                .UseConfiguration(config);
         }
     }
 }
