@@ -6,18 +6,15 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Rest_Api_Repo.Data;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 
 namespace Restfull_IntegrationTest
 {
-    
+
     public class InMemoryApplicationFactory<TStartup>
         : WebApplicationFactory<TStartup> where TStartup : class
     {
-        public void ClearTable<T>() where T :class
+        public void ClearTable<T>() where T : class
         {
             using var scope = this.Services.CreateScope(); ;
             var scopedServices = scope.ServiceProvider;
@@ -28,7 +25,7 @@ namespace Restfull_IntegrationTest
         }
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
-            
+
             var config = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json").Build();
@@ -40,9 +37,7 @@ namespace Restfull_IntegrationTest
                     var options = new DbContextOptionsBuilder<DataContext>()
                     .UseInMemoryDatabase(Guid.NewGuid().ToString())
                     .Options;
-                    
-                    services.AddScoped<DataContext>(serviceProvider => new DataContext(options));
-
+                    services.AddScoped(serviceProvider => new DataContext(options));
                     var sp = services.BuildServiceProvider();
                     using var scope = sp.CreateScope();
                     var scopedServices = scope.ServiceProvider;

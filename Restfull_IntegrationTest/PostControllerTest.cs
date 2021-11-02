@@ -46,7 +46,7 @@ namespace Restfull_IntegrationTest
 
             //Arrange
             var client = await _factory.CreateClient().AuthenticateAsync();
-            var response = await client.CreatePostAsync(new PostRequest { Name = Guid.NewGuid().ToString(), ExistingTags = new List<Guid>(), NewTags = new List<string> {$"#{Guid.NewGuid().ToString("N")}" } });
+            var response = await client.CreatePostAsync(new PostRequest { Name = Guid.NewGuid().ToString(), ExistingTags = new List<Guid>(), NewTags = new List<string> {$"#{Guid.NewGuid():N}" } });
             var url = $"{ApiRoutes.Posts.PostBase}/{ApiRoutes.Posts.Get}";
             //Act
             var PostResponse = await client.GetAsync(url.Replace("{postId}",response.Id.ToString()));
@@ -67,7 +67,7 @@ namespace Restfull_IntegrationTest
 
             //Arrange
             var client = await _factory.CreateClient().AuthenticateAsync();
-            var response = await client.CreatePostAsync(new PostRequest { Name = Guid.NewGuid().ToString(), ExistingTags = new List<Guid>(), NewTags = new List<string> { $"#{Guid.NewGuid().ToString("N")}" } });
+            var response = await client.CreatePostAsync(new PostRequest { Name = Guid.NewGuid().ToString(), ExistingTags = new List<Guid>(), NewTags = new List<string> { $"#{Guid.NewGuid():N}" } });
             var url = $"{ApiRoutes.Posts.PostBase}/{ApiRoutes.Posts.Get}";
             //Act
             var PostResponse = await client.GetAsync(url.Replace("{postId}", response.Id.ToString()));

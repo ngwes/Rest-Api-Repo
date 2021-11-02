@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using System;
@@ -12,7 +13,7 @@ namespace Rest_Api_Repo.Installers
 {
     public class SwaggerInstaller : IInstaller
     {
-        public void InstallServices(IServiceCollection services, IConfiguration configuration)
+        public void InstallServices(IServiceCollection services, IConfiguration configuration, IWebHostEnvironment env)
         {
             services.AddSwaggerGen(c => {
                 c.SwaggerDoc("v1", new OpenApiInfo
