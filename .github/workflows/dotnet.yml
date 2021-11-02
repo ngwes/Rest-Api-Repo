@@ -1,0 +1,28 @@
+name: .NET
+
+on:
+  push:
+    branches: [ develop, master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ${{matrix.os}}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macOS-latest]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.x
+    - name: Restore dependencies
+      run: dotnet restore "Rest Api Repo/Rest Api Repo.csproj"
+    - name: Build
+      run: dotnet build  "Rest Api Repo/Rest Api Repo.csproj"
+    - name: Test
+      run: dotnet test  "Restfull_IntegrationTest/RestApi_IntegrationTest.csproj" --verbosity normal

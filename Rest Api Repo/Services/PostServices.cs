@@ -1,0 +1,99 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Rest_Api_Repo.Contracts.V1.Requests;
+using Rest_Api_Repo.Data;
+using Rest_Api_Repo.Domain;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace Rest_Api_Repo.Services
+{
+
+    public class PostService : IPostService
+    {
+
+        private readonly DataContext _dataContext;
+
+        public PostService(DataContext dataContext)
+        {
+            _dataContext = dataContext;
+        }
+
+        public async Task<bool> CreatePostAsync(Post post)
+        {
+            await _dataContext.Posts.AddAsync(post);
+            var created = await _dataContext.SaveChangesAsync();
+            return created > 0;
+        }
+
+        public async Task<bool> DeletePostAsync(Guid postId)
+        {
+
+            var post = await GetPostByIdAsync(postId);
+            if (post is null)
+                return false;
+            _dataContext.Posts.Remove(post);
+            var deleted = await _dataContext.SaveChangesAsync();
+            return deleted > 0;
+        }
+
+        
+
+        public async Task<Post> GetPostByIdAsync(Guid id)
+        {
+            return await _dataContext.Posts
+                .Include(p=>p.PostTags).ThenInclude(pt=>pt.Tag)
+                .Include(p=>p.User)
+                .SingleOrDefaultAsync(p => p.Id.Equals(id));
+        }
+
+        public async Task<List<Post>> GetPostsAsync(GetAllPostFilter filter, PaginationFilter paginationFilter = null)
+        {
+            var queryable = _dataContext.Posts
+                .Include(p => p.PostTags).ThenInclude(pt => pt.Tag)
+                .Include(x => x.User)
+                .AsQueryable();
+
+            if (paginationFilter is null)
+                return await queryable.ToListAsync();
+
+            var skip = paginationFilter.PageNumber <= 1 ? 0 : paginationFilter.PageNumber * paginationFilter.PageSize;
+            if (skip < 0)
+                return new List<Post>();
+            
+            queryable = AddFilterOnQuery(filter, queryable);
+
+            return await queryable
+                    .Skip(skip)
+                    .Take(paginationFilter.PageSize)
+                    .ToListAsync();
+
+        }
+
+        private static IQueryable<Post> AddFilterOnQuery(GetAllPostFilter filter, IQueryable<Post> queryable)
+        {
+            if (!string.IsNullOrEmpty(filter?.UserId))
+                queryable = queryable.Where(p => p.UserId.Equals(filter.UserId));
+            return queryable;
+        }
+
+        public async Task<bool> UpdatePostAsync(Post postToUpdate)
+        {
+            _dataContext.Posts.Update(postToUpdate);
+            var updatedCount = await _dataContext.SaveChangesAsync();
+
+            return updatedCount > 0;
+        }
+
+        public async Task<bool> UserOwnsPostAsync(Guid postId, string userId)
+        {
+            var post = await _dataContext.Posts
+                .AsNoTracking()
+                .SingleOrDefaultAsync(p => p.Id.Equals(postId));
+            if (post is null)
+                return false;
+            return post.UserId.Equals(userId);
+        }
+    }
+}

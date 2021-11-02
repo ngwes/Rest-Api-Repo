@@ -1,0 +1,52 @@
+version: "3.7"
+services:
+    db:
+      container_name: db
+      image: mcr.microsoft.com/mssql/server:2017-CU8-ubuntu
+      ports:
+      - "1433:1433"
+      networks:
+        - my_network
+      env_file:
+        - ./db.env
+      volumes:
+      - .\data:/var/opt/mssql/data
+
+
+    rest_api:
+      container_name: rest_api
+      build:
+        context: .
+        dockerfile: ../Rest Api Repo/Dockerfile
+      env_file:
+        - api.env
+      networks:
+        - my_network
+      ports:
+        - 5000:5000
+      depends_on:
+        - db
+
+    # cosmosdb:
+    #     container_name: cosmosdb
+    #     image: mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator
+    #     tty: true
+    #     restart: always
+    #     ports:
+    #         - "8081:8081"
+            # - "8900:8900"
+            # - "8901:8901"
+            # - "8979:8979"
+            # - "10250:10250"
+            # - "10251:10251"
+            # - "10252:10252"
+            # - "10253:10253"
+            # - "10254:10254"
+            # - "10255:10255"
+            # - "10256:10256"
+            # - "10350:10350"
+        # volumes:
+        #     -  vol_cosmos:C:\CosmosDB.Emulator\bind-mount
+networks:
+  my_network:
+      driver: bridge
