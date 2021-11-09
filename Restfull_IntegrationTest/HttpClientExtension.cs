@@ -1,10 +1,8 @@
 ﻿using Newtonsoft.Json;
-using Rest_Api_Repo.Contracts.V1;
-using Rest_Api_Repo.Contracts.V1.Requests;
-using Rest_Api_Repo.Contracts.V1.Responses;
-using RestApi_Contracts.V1.Responses;
-using System;
-using System.Collections.Generic;
+using Rest_Api_Repo.Domain.Requests.V1;
+using Rest_Api_Repo.Domain.Responses.V1;
+using Rest_Api_Repo.ResponseModels;
+using Rest_Api_Repo.Routes.V1.ApiRoutes;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -48,7 +46,7 @@ namespace Restfull_IntegrationTest
                 "application/json");
             var registrationUrl = $"{ApiRoutes.Identity.IdentityBase}/{ApiRoutes.Identity.Register}";
             var response = await client.PostAsync(registrationUrl, requestContent);
-            if(!response.IsSuccessStatusCode)
+            if (!response.IsSuccessStatusCode)
             {
                 var authenticationUrl = $"{ApiRoutes.Identity.IdentityBase}/{ApiRoutes.Identity.Login}";
                 response = await client.PostAsync(authenticationUrl, requestContent);

@@ -1,14 +1,13 @@
 ﻿using FluentAssertions;
 using Newtonsoft.Json;
 using Rest_Api_Repo;
-using Rest_Api_Repo.Contracts.V1;
-using Rest_Api_Repo.Contracts.V1.Requests;
-using Rest_Api_Repo.Contracts.V1.Responses;
 using Rest_Api_Repo.Domain.Entities;
-using RestApi_Contracts.V1.Responses;
+using Rest_Api_Repo.Domain.Requests.V1;
+using Rest_Api_Repo.Domain.Responses.V1;
+using Rest_Api_Repo.ResponseModels;
+using Rest_Api_Repo.Routes.V1.ApiRoutes;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -36,7 +35,7 @@ namespace Restfull_IntegrationTest
             var responseContent = await response.Content.ReadAsStringAsync();
             var responseEntity = JsonConvert.DeserializeObject<PagedResponse<PostResponse>>(responseContent);
             //Assert
-            responseEntity.Data.Should().BeEmpty(); 
+            responseEntity.Data.Should().BeEmpty();
         }
 
 
@@ -46,10 +45,10 @@ namespace Restfull_IntegrationTest
 
             //Arrange
             var client = await _factory.CreateClient().AuthenticateAsync();
-            var response = await client.CreatePostAsync(new PostRequest { Name = Guid.NewGuid().ToString(), ExistingTags = new List<Guid>(), NewTags = new List<string> {$"#{Guid.NewGuid():N}" } });
+            var response = await client.CreatePostAsync(new PostRequest { Name = Guid.NewGuid().ToString(), ExistingTags = new List<Guid>(), NewTags = new List<string> { $"#{Guid.NewGuid():N}" } });
             var url = $"{ApiRoutes.Posts.PostBase}/{ApiRoutes.Posts.Get}";
             //Act
-            var PostResponse = await client.GetAsync(url.Replace("{postId}",response.Id.ToString()));
+            var PostResponse = await client.GetAsync(url.Replace("{postId}", response.Id.ToString()));
             PostResponse.EnsureSuccessStatusCode();
             var responseContent = await PostResponse.Content.ReadAsStringAsync();
             var responseEntity = JsonConvert.DeserializeObject<Response<PostResponse>>(responseContent);

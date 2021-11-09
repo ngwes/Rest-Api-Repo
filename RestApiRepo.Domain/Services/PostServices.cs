@@ -46,7 +46,7 @@ namespace Rest_Api_Repo.Domain.Services
             //    .Include(p => p.PostTags).ThenInclude(pt => pt.Tag)
             //    .Include(p => p.User)
             //    .SingleOrDefaultAsync(p => p.Id.Equals(id));
-            var posts = await _postRepository.GetAllPostsAsync(x => x.Id.Equals(id), null, "PostTags.Tags");
+            var posts = await _postRepository.GetAllPostsAsync(x => x.Id.Equals(id), null, "PostTags.Tag");
             return posts.FirstOrDefault();
         }
 
