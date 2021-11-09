@@ -4,7 +4,7 @@ using Rest_Api_Repo;
 using Rest_Api_Repo.Contracts.V1;
 using Rest_Api_Repo.Contracts.V1.Requests;
 using Rest_Api_Repo.Contracts.V1.Responses;
-using Rest_Api_Repo.Domain;
+using Rest_Api_Repo.Domain.Entities;
 using RestApi_Contracts.V1.Responses;
 using System;
 using System.Collections.Generic;

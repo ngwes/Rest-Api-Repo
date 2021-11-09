@@ -4,7 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Rest_Api_Repo.Data;
+using Rest_Api_Repo.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +14,7 @@ namespace Rest_Api_Repo
 {
     public class Program
     {
-        public static void /*async Task*/ Main(string[] args)
+        public static void Main(string[] args)
         {
             
             CreateHostBuilder(args).Build().Run();
