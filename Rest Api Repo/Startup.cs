@@ -1,27 +1,22 @@
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi.Models;
 using Polly;
-using Rest_Api_Repo.Data;
+using Rest_Api_Repo.Infrastructure;
+using Rest_Api_Repo.Extensions;
 using Rest_Api_Repo.Installers;
-using Rest_Api_Repo.Configurations;
+using Rest_Api_Repo.Options;
+using RestApi_Contracts.HealtCheck;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using RestApi_Contracts.HealtCheck;
-using Rest_Api_Repo.Extensions;
-using Microsoft.AspNetCore.Http;
+using Rest_Api_Repo.Domain.MappingProfiles;
 
 namespace Rest_Api_Repo
 {
@@ -35,13 +30,13 @@ namespace Rest_Api_Repo
         }
 
         public IConfiguration Configuration { get; }
-        private  IWebHostEnvironment Env { get; }
+        private IWebHostEnvironment Env { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.InstallServicesInAssembly(Configuration, Env);
-            services.AddAutoMapper(typeof(Startup));
+            services.AddAutoMapper(new[] { typeof(DomainToResponseProfile), typeof(RequestToDomainProfile) });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -82,11 +77,12 @@ namespace Rest_Api_Repo
             app.UseStaticFiles();
 
             app.UseAuthentication();
-            
+
             var swaggerOptions = new SwaggerOptions();
             Configuration.GetSection(nameof(SwaggerOptions)).Bind(swaggerOptions);
-            app.UseSwagger(options=> {
-                options.RouteTemplate = swaggerOptions.JsonRoute;   
+            app.UseSwagger(options =>
+            {
+                options.RouteTemplate = swaggerOptions.JsonRoute;
             });
             app.UseSwaggerUI(c =>
             {
@@ -105,7 +101,8 @@ namespace Rest_Api_Repo
         }
 
 
-        private async Task CreateAdminAsync(RoleManager<IdentityRole> roleManager) {
+        private async Task CreateAdminAsync(RoleManager<IdentityRole> roleManager)
+        {
 
             var retry = Policy.Handle<Exception>()
                 .WaitAndRetryAsync(new TimeSpan[]
@@ -114,7 +111,8 @@ namespace Rest_Api_Repo
                     TimeSpan.FromSeconds(6),
                     TimeSpan.FromSeconds(12)
                 });
-            await retry.ExecuteAsync(async ()=> { 
+            await retry.ExecuteAsync(async () =>
+            {
 
                 if (!await roleManager.RoleExistsAsync("Admin"))
                 {
@@ -142,7 +140,7 @@ namespace Rest_Api_Repo
 
             retry.Execute(() =>
                 dataContext.Database.Migrate());
-                
+
         }
     }
 }

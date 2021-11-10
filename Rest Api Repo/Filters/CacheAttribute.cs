@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Rest_Api_Repo.CacheUtility;
+using Rest_Api_Repo.Cache;
 using Rest_Api_Repo.Configurations;
-using Rest_Api_Repo.Services;
+using Rest_Api_Repo.Domain.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,9 +22,9 @@ namespace Rest_Api_Repo.Filters
     {
         private readonly int _timeToLive;
         private readonly IResponseCacheService _responseCacheService;
-        private readonly RedisConfiguration _redisConfiguration;
+        private readonly CacheConfiguration _redisConfiguration;
         private readonly ICacheKeyFromHttpRequestBuilder _cacheKeyBuilder;
-        public CacheAttributeImpl(int timeToLive, IResponseCacheService responseCacheService, RedisConfiguration redisConfiguration)
+        public CacheAttributeImpl(int timeToLive, IResponseCacheService responseCacheService, CacheConfiguration redisConfiguration)
         {
             _timeToLive = timeToLive;
             _responseCacheService = responseCacheService;

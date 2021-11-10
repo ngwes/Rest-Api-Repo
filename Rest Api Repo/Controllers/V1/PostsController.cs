@@ -2,20 +2,20 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Rest_Api_Repo.Contracts.V1;
-using Rest_Api_Repo.Contracts.V1.Requests;
-using Rest_Api_Repo.Contracts.V1.Responses;
-using Rest_Api_Repo.Domain;
+using Rest_Api_Repo.ResponseModels;
+using Rest_Api_Repo.Domain.Entities;
 using Rest_Api_Repo.Extensions;
 using Rest_Api_Repo.Filters;
 using Rest_Api_Repo.Helpers;
-using Rest_Api_Repo.Services;
-using RestApi_Contracts.V1.Queries;
-using RestApi_Contracts.V1.Responses;
+using Rest_Api_Repo.Domain.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Rest_Api_Repo.Routes.V1.ApiRoutes;
+using Rest_Api_Repo.Domain.Responses.V1;
+using Rest_Api_Repo.Domain.Queries.V1;
+using Rest_Api_Repo.Domain.Requests.V1;
 
 namespace Rest_Api_Repo.Controllers.V1
 {
@@ -27,14 +27,14 @@ namespace Rest_Api_Repo.Controllers.V1
         private readonly IPostService _postService;
         private readonly ITagService _tagService;
         private readonly IMapper _mapper;
-        private readonly IUriService _uriService;
+        private readonly IPostUriBuilder _uriBuilder;
 
-        public PostsController(IPostService postService, ITagService tagService, IMapper mapper, IUriService uriService)
+        public PostsController(IPostService postService, ITagService tagService, IMapper mapper, IPostUriBuilder uriBuilder)
         {
             _postService = postService;
             _tagService = tagService;
             _mapper = mapper;
-            _uriService = uriService;
+            _uriBuilder = uriBuilder;
         }
 
         /// <summary>
@@ -65,7 +65,7 @@ namespace Rest_Api_Repo.Controllers.V1
             if(pagination is null || pagination.PageNumber < 0 || pagination.PageSize < 1)
                 return Ok(paginationResponse);
 
-            paginationResponse = PaginationHelper.CreatePaginatedPostResponse(_uriService, pagination, response);
+            paginationResponse = PaginationHelper.CreatePaginatedPostResponse(_uriBuilder, pagination, response);
 
             return Ok(paginationResponse);
         }
@@ -90,9 +90,10 @@ namespace Rest_Api_Repo.Controllers.V1
                  {
                      UserCreatorId = HttpContext.GetUserId(),
                      TagName = t,
-                     CreatedAt = DateTime.UtcNow
+                     CreatedAt = DateTime.UtcNow,
                  });
-            var existingTags = _tagService.GetTagsById(request.ExistingTags);
+            
+            var existingTags = await _tagService.GetTagsByIdAsync(request.ExistingTags);
             var postTags = tags.Concat(existingTags).ToList();
 
             post.Name = request.Name;
@@ -143,7 +144,7 @@ namespace Rest_Api_Repo.Controllers.V1
                         TagName = t,
                         CreatedAt = DateTime.UtcNow
                 }).ToList();
-            var existingTags = _tagService.GetTagsById(postRequest.ExistingTags);
+            var existingTags = await _tagService.GetTagsByIdAsync(postRequest.ExistingTags);
             var postTags = tags.Concat(existingTags).ToList();
             var post = new Post
             {
@@ -157,7 +158,7 @@ namespace Rest_Api_Repo.Controllers.V1
 
             await _postService.CreatePostAsync(post);
             var response = _mapper.Map<PostResponse>(post);
-            var location = _uriService.GetPostUri(post.Id.ToString());
+            var location = _uriBuilder.GetPostUri(post.Id.ToString());
 
             return Created(location, new Response<PostResponse>(response));
         }

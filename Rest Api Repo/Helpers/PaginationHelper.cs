@@ -1,7 +1,7 @@
-﻿using Rest_Api_Repo.Contracts.V1.Responses;
-using Rest_Api_Repo.Domain;
-using Rest_Api_Repo.Services;
-using RestApi_Contracts.V1.Responses;
+﻿using Rest_Api_Repo.Domain.Entities;
+using Rest_Api_Repo.Domain.Responses.V1;
+using Rest_Api_Repo.Domain.Services;
+using Rest_Api_Repo.ResponseModels;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -9,7 +9,7 @@ namespace Rest_Api_Repo.Helpers
 {
     public static class PaginationHelper
     {
-        public static PagedResponse<PostResponse> CreatePaginatedPostResponse(IUriService uriService
+        public static PagedResponse<PostResponse> CreatePaginatedPostResponse(IPostUriBuilder uriService
             , PaginationFilter pagination, List<PostResponse> response)
         {
             var nextPage =

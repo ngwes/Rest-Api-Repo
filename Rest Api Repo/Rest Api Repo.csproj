@@ -38,12 +38,7 @@
     <PackageReference Include="AutoMapper" Version="10.1.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="10.3.4" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.19" />
-    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.8" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.8" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.8" />
     <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.21.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.8" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.8" />
     <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="5.0.1" />
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="3.1.20" />
@@ -67,7 +62,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Restful_Contracts\RestApi_Contracts.csproj" />
+    <ProjectReference Include="..\RestApiRepo.Domain\RestApiRepo.Domain.csproj" />
+    <ProjectReference Include="..\RestApiRepo.Infrastructure\RestApiRepo.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

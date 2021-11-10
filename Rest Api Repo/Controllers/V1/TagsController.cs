@@ -2,14 +2,15 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Rest_Api_Repo.Contracts.V1;
-using Rest_Api_Repo.Contracts.V1.Responses;
-using Rest_Api_Repo.Services;
+using Rest_Api_Repo.ResponseModels;
+using Rest_Api_Repo.Domain.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Rest_Api_Repo.Routes.V1.ApiRoutes;
+using Rest_Api_Repo.Domain.Responses.V1;
 
 namespace Rest_Api_Repo.Controllers.V1
 {

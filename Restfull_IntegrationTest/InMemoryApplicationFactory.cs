@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Rest_Api_Repo.Data;
+using Rest_Api_Repo.Infrastructure;
 using System;
 using System.IO;
 

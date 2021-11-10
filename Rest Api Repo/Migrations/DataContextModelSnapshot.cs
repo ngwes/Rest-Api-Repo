@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Rest_Api_Repo.Data;
+using Rest_Api_Repo.Infrastructure;
 
 namespace Rest_Api_Repo.Migrations
 {
@@ -219,7 +219,7 @@ namespace Rest_Api_Repo.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("Rest_Api_Repo.Domain.Post", b =>
+            modelBuilder.Entity("Rest_Api_Repo.Domain.Entities.Post", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -238,7 +238,7 @@ namespace Rest_Api_Repo.Migrations
                     b.ToTable("Post","post");
                 });
 
-            modelBuilder.Entity("Rest_Api_Repo.Domain.PostTag", b =>
+            modelBuilder.Entity("Rest_Api_Repo.Domain.Entities.PostTag", b =>
                 {
                     b.Property<Guid>("PostId")
                         .HasColumnType("uniqueidentifier");
@@ -253,7 +253,7 @@ namespace Rest_Api_Repo.Migrations
                     b.ToTable("PostTag","post");
                 });
 
-            modelBuilder.Entity("Rest_Api_Repo.Domain.RefreshToken", b =>
+            modelBuilder.Entity("Rest_Api_Repo.Domain.Entities.RefreshToken", b =>
                 {
                     b.Property<string>("Token")
                         .HasColumnType("nvarchar(450)");
@@ -283,7 +283,7 @@ namespace Rest_Api_Repo.Migrations
                     b.ToTable("RefreshToken","post");
                 });
 
-            modelBuilder.Entity("Rest_Api_Repo.Domain.Tag", b =>
+            modelBuilder.Entity("Rest_Api_Repo.Domain.Entities.Tag", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -356,36 +356,36 @@ namespace Rest_Api_Repo.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Rest_Api_Repo.Domain.Post", b =>
+            modelBuilder.Entity("Rest_Api_Repo.Domain.Entities.Post", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
                 });
 
-            modelBuilder.Entity("Rest_Api_Repo.Domain.PostTag", b =>
+            modelBuilder.Entity("Rest_Api_Repo.Domain.Entities.PostTag", b =>
                 {
-                    b.HasOne("Rest_Api_Repo.Domain.Post", "Post")
+                    b.HasOne("Rest_Api_Repo.Domain.Entities.Post", "Post")
                         .WithMany("PostTags")
                         .HasForeignKey("PostId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Rest_Api_Repo.Domain.Tag", "Tag")
+                    b.HasOne("Rest_Api_Repo.Domain.Entities.Tag", "Tag")
                         .WithMany("PostTags")
                         .HasForeignKey("TagId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Rest_Api_Repo.Domain.RefreshToken", b =>
+            modelBuilder.Entity("Rest_Api_Repo.Domain.Entities.RefreshToken", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
                 });
 
-            modelBuilder.Entity("Rest_Api_Repo.Domain.Tag", b =>
+            modelBuilder.Entity("Rest_Api_Repo.Domain.Entities.Tag", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "UserCreator")
                         .WithMany()

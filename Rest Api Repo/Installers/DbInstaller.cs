@@ -3,12 +3,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Rest_Api_Repo.Data;
-using Rest_Api_Repo.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Rest_Api_Repo.Infrastructure;
+using Rest_Api_Repo.Domain.Installers;
 
 namespace Rest_Api_Repo.Installers
 {
@@ -22,10 +18,6 @@ namespace Rest_Api_Repo.Installers
             services.AddDefaultIdentity<IdentityUser>()
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<DataContext>();
-            services.AddScoped<IPostService, PostService>();
-            services.AddScoped<IUserService, UserService>();
-            services.AddScoped<ITagService, TagService>();
-            //services.AddSingleton<IPostService, CosmosPostService>();
         }
     }
 }
