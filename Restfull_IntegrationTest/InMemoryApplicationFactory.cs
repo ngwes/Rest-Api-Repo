@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
@@ -41,10 +42,32 @@ namespace Restfull_IntegrationTest
                     var sp = services.BuildServiceProvider();
                     using var scope = sp.CreateScope();
                     var scopedServices = scope.ServiceProvider;
-                    var db = scopedServices.GetRequiredService<DataContext>();
-                    db.Database.EnsureCreated();
+                    CreateTestAdminUser(scopedServices);
+                    EnsureDataCreated(scopedServices);
                 })
                 .UseConfiguration(config);
+        }
+
+        private void EnsureDataCreated(IServiceProvider scopedServices)
+        {
+            scopedServices.GetRequiredService<DataContext>().Database.EnsureCreated();
+        }
+        private void CreateTestAdminUser(IServiceProvider scopedServices)
+        {
+            var userManager = scopedServices.GetRequiredService<UserManager<IdentityUser>>();
+            var roleManager = scopedServices.GetRequiredService<RoleManager<IdentityRole>>();
+            var admin = new IdentityUser
+            {
+                Email = "test@integration.com",
+                UserName = "test@integration.com"
+            };
+            if (!roleManager.RoleExistsAsync("Admin").GetAwaiter().GetResult())
+            {
+                var adminRole = new IdentityRole("Admin");
+                roleManager.CreateAsync(adminRole).GetAwaiter().GetResult();
+            }
+            userManager.CreateAsync(admin, "Pa$$word1").GetAwaiter().GetResult();
+            userManager.AddToRoleAsync(admin, "Admin").GetAwaiter().GetResult();
         }
     }
 }

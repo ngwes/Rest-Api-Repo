@@ -37,20 +37,16 @@ namespace Restfull_IntegrationTest
         {
 
             var requestContent = new StringContent(JsonConvert
-                .SerializeObject(new UserRegistrationRequest
+                .SerializeObject(new UserLoginRequest
                 {
                     Email = "test@integration.com",
                     Password = "Pa$$word1"
                 }),
                 Encoding.UTF8,
                 "application/json");
-            var registrationUrl = $"{ApiRoutes.Identity.IdentityBase}/{ApiRoutes.Identity.Register}";
-            var response = await client.PostAsync(registrationUrl, requestContent);
-            if (!response.IsSuccessStatusCode)
-            {
-                var authenticationUrl = $"{ApiRoutes.Identity.IdentityBase}/{ApiRoutes.Identity.Login}";
-                response = await client.PostAsync(authenticationUrl, requestContent);
-            }
+
+            var authenticationUrl = $"{ApiRoutes.Identity.IdentityBase}/{ApiRoutes.Identity.Login}";
+            var response = await client.PostAsync(authenticationUrl, requestContent);
 
             var responseContent = await response.Content.ReadAsStringAsync();
             var responseEntity = JsonConvert

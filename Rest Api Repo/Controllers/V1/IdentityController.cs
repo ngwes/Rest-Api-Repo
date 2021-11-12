@@ -25,7 +25,6 @@ namespace Rest_Api_Repo.Controllers.V1
         [HttpPost(ApiRoutes.Identity.Register)]
         public async Task<IActionResult> Register([FromBody]UserRegistrationRequest request)
         {
-            //Waiting for a better user request validation
             if (!ModelState.IsValid)
             {
                 return BadRequest(new AuthFailResponse

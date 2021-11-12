@@ -140,7 +140,6 @@ namespace Rest_Api_Repo
 
             retry.Execute(() =>
                 dataContext.Database.Migrate());
-
         }
     }
 }

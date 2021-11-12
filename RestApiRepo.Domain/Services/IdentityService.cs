@@ -72,9 +72,6 @@ namespace Rest_Api_Repo.Domain.Services
                 return new AuthenticationResult
                 { Errors = new[] { "This token has expired yet" } };
 
-            //var storedRefreshToken = await _dataContext
-            //    .RefreshTokens
-            //    .SingleOrDefaultAsync(x => x.Token.Equals(refreshToken));
             var storedRefreshToken = await _refreshTokenRepository.GetRefreshTokenByTokenIdAsync(refreshToken);
 
             if (storedRefreshToken is null)
@@ -101,8 +98,6 @@ namespace Rest_Api_Repo.Domain.Services
                 { Errors = new[] { "This refresh token doesn't match this JWT" } };
 
             storedRefreshToken.Used = true;
-            //_dataContext.RefreshTokens.Update(storedRefreshToken);
-            //await _dataContext.SaveChangesAsync();
             _refreshTokenRepository.UpdateToken(storedRefreshToken);
             await _refreshTokenRepository.UnitOfWork.SaveEntitiesAsync();
 
@@ -166,7 +161,7 @@ namespace Rest_Api_Repo.Domain.Services
                 };
             }
             //await _userManager.AddClaimAsync(newUser, new Claim("tag.view", "true"));
-
+            await _userManager.AddToRoleAsync(newUser, "Poster");
             return await GenerateAuthenticationResultForUserAsync(newUser);
         }
 
@@ -206,8 +201,6 @@ namespace Rest_Api_Repo.Domain.Services
                 Token = Guid.NewGuid().ToString()
             };
 
-            //await _dataContext.RefreshTokens.AddAsync(refreshToken);
-            //await _dataContext.SaveChangesAsync();
              _refreshTokenRepository.InsertToken(refreshToken);
             await _refreshTokenRepository.UnitOfWork.SaveEntitiesAsync();
 
