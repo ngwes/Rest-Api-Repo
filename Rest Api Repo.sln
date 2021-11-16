@@ -3,25 +3,25 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30717.126
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rest Api Repo", "Rest Api Repo\Rest Api Repo.csproj", "{10FB5EE2-3BE8-488D-9AC2-4AB84B19B1E7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestApiRepo.Api", "src\RestApiRepo.API\RestApiRepo.Api.csproj", "{10FB5EE2-3BE8-488D-9AC2-4AB84B19B1E7}"
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{CE166B79-2FA0-443E-AC2B-9C17DB727C6F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestApi.Integration.Test", "Restfull_IntegrationTest\RestApi.Integration.Test.csproj", "{6907959B-9506-46D9-BBC2-B3038A7FA77B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestApi.Integration.Test", "tests\RestApi.Integration.Test\RestApi.Integration.Test.csproj", "{6907959B-9506-46D9-BBC2-B3038A7FA77B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestApi_SDK", "Restful_SDK\RestApi_SDK.csproj", "{C3C69D57-DF92-46DD-9E2A-7E7A714A0BFF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestApiRepo.SDK", "src\RestApiRepo.SDK\RestApiRepo.SDK.csproj", "{C3C69D57-DF92-46DD-9E2A-7E7A714A0BFF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestApi_SDK_Sample", "RestFul_SDK_Sample\RestApi_SDK_Sample.csproj", "{856D8A3E-5365-4609-A151-ACF409E67EE0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestApiRepo.SDK.Sample", "src\RestApiRepo.SDK.Sample\RestApiRepo.SDK.Sample.csproj", "{856D8A3E-5365-4609-A151-ACF409E67EE0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestApi_Contracts", "Restful_Contracts\RestApi_Contracts.csproj", "{2BC20DB5-3C16-44D4-A0C5-421A092BB52E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestApiRepo.Contracts", "src\RestApiRepo.Contracts\RestApiRepo.Contracts.csproj", "{2BC20DB5-3C16-44D4-A0C5-421A092BB52E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestApiRepo.Domain", "RestApiRepo.Domain\RestApiRepo.Domain.csproj", "{838A8B77-6298-4896-83A9-1B810B50B2AC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestApiRepo.Domain", "src\RestApiRepo.Domain\RestApiRepo.Domain.csproj", "{838A8B77-6298-4896-83A9-1B810B50B2AC}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{F285AB09-7D8E-453A-AF27-CAEF705AD8FE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{053529AC-F485-4BB3-B2FA-CAC4C5CCFA06}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestApiRepo.Infrastructure", "RestApiRepo.Infrastructure\RestApiRepo.Infrastructure.csproj", "{48D3DD7D-5209-4D71-B0B7-B4F2A5075C0E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestApiRepo.Infrastructure", "src\RestApiRepo.Infrastructure\RestApiRepo.Infrastructure.csproj", "{48D3DD7D-5209-4D71-B0B7-B4F2A5075C0E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
