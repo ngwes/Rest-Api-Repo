@@ -39,23 +39,32 @@ namespace RestApiRepo.Domain.Services
             return comment.FirstOrDefault();
         }
 
-        public async Task<IEnumerable<Comment>> GetCommentsAsync(UserFilter filter, PaginationFilter paginationFilter = null)
+        public async Task<IEnumerable<Comment>> GetCommentsAsync(UserFilter userFilter, PaginationFilter paginationFilter = null)
         {
             var skip = paginationFilter.PageNumber <= 1 ? 0 : paginationFilter.PageNumber * paginationFilter.PageSize;
 
             IEnumerable<Comment> posts;
-            if (!string.IsNullOrEmpty(filter?.UserId))
-                posts = await _commentRepository.GetAllCommentsAsync(x => x.UserId.Equals(filter.UserId), null, "User,Post", skip, paginationFilter.PageSize);
+            if (!string.IsNullOrEmpty(userFilter?.UserId))
+                posts = await _commentRepository.GetAllCommentsAsync(x => x.UserId.Equals(userFilter.UserId), null, "User,Post", skip, paginationFilter.PageSize);
             else
             {
                 posts = await _commentRepository.GetAllCommentsAsync(null, null, "User,Post", skip, paginationFilter.PageSize);
             }
-            return posts.ToList();
+            return posts;
         }
 
-        public async Task<IEnumerable<Comment>> GetPostCommentsAsync(Guid postId)
+        public async Task<IEnumerable<Comment>> GetPostCommentsAsync(Guid postId, UserFilter userFilter, PaginationFilter paginationFilter = null)
         {
-            return await _commentRepository.GetAllCommentsAsync(c => c.PostId.Equals(postId));
+            var skip = paginationFilter.PageNumber <= 1 ? 0 : paginationFilter.PageNumber * paginationFilter.PageSize;
+
+            IEnumerable<Comment> posts;
+            if (!string.IsNullOrEmpty(userFilter?.UserId))
+                posts = await _commentRepository.GetAllCommentsAsync(filter: x => x.UserId.Equals(userFilter.UserId) && x.PostId.Equals(postId),includeProperties: "User,Post", skip: skip, take: paginationFilter.PageSize);
+            else
+            {
+                posts = await _commentRepository.GetAllCommentsAsync(filter:x=>x.PostId.Equals(postId), includeProperties: "User,Post", skip: skip, take: paginationFilter.PageSize);
+            }
+            return posts;
         }
 
         public async Task<bool> UpdateCommentAsync(Comment comment)

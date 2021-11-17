@@ -6,6 +6,6 @@ namespace RestApiRepo.Domain.Responses.V1.Comments
 {
     public class GetPostCommentsResponse
     {
-        public IEnumerable<GetCommentByIdResponse> Comments { get; set; }
+        public IEnumerable<PostCommentResponse> Comments { get; set; }
     }
 }

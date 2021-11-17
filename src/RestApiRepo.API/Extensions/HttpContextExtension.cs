@@ -16,5 +16,11 @@ namespace RestApiRepo.Extensions
             return context.User.Claims.Single(x => x.Type.Equals("id")).Value;
         }
 
+        public static string GetBaseUri(this HttpContext context)
+        {
+            var request = context.Request;
+            return $"{request.Scheme}://{request.Host.ToUriComponent()}";
+        }
+
     }
 }

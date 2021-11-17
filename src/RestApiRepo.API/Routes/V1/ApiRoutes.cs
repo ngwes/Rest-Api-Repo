@@ -28,6 +28,7 @@ namespace RestApiRepo.Routes.V1.ApiRoutes
             public const string Create = "";
             public const string Update = "{commentId}";
             public const string Delete = "{commentId}";
+            public const string GetPostComments = "postComments/{postId}";
         }
         public static class Tags
         {

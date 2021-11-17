@@ -26,9 +26,9 @@ namespace RestApiRepo.Domain.Handlers.V1.Comments
 
         public async Task<GetAllCommentsResponse> Handle(GetAllCommentsQuery request, CancellationToken cancellationToken)
         {
-            var allComments = await _commentService.GetCommentsAsync(request.userFilter, request.paginationFilter);
-            //TODO: var response = _mapper.Map<GetCommentByIdResponse>(allComments);
-            var response = allComments.Select(c => new GetCommentByIdResponse
+            var allComments = await _commentService.GetCommentsAsync(request.UserFilter, request.PaginationFilter);
+            //TODO: var response = _mapper.Map<CommentResponse>(allComments);
+            var response = allComments.Select(c => new CommentResponse
             {
                 Content = c.Content,
                 UserId = c.UserId,

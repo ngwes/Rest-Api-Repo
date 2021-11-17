@@ -23,13 +23,21 @@ namespace RestApiRepo.Domain.Handlers.V1.Comments
 
         public async Task<CreateCommentResponse> Handle(CreateCommentCommand request, CancellationToken cancellationToken)
         {
-            var result = await _commentService.CreateCommentAsync(new Comment { 
+            var comment = new Comment
+            {
                 Content = request.Content,
                 CreateAt = DateTime.Now,
                 UserId = request.UserId,
                 PostId = request.PostId
-            });
-            return new CreateCommentResponse { Success = result };
+            };
+            var result = await _commentService.CreateCommentAsync(comment);
+            var response = new CommentResponse {
+                Content = comment.Content,
+                UserId = comment.UserId,
+                PostId = comment.PostId,
+                Id = comment.Id
+            };
+            return new CreateCommentResponse { Success = result, CommentResponse = response };
         }
     }
 }

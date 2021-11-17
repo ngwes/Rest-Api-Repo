@@ -3,13 +3,12 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RestApiRepo.Domain.Entities;
 using RestApiRepo.Domain.Requests.V1;
-using RestApiRepo.Domain.Responses.V1;
-using RestApiRepo.Domain.Requests.V1.Users;
 using RestApiRepo.Domain.Requests.V1.Posts;
+using RestApiRepo.Domain.Responses.V1;
 using RestApiRepo.Domain.Services;
 using RestApiRepo.Extensions;
 using RestApiRepo.Filters;
-using RestApiRepo.Helpers;
+using RestApiRepo.PresentationServices;
 using RestApiRepo.ResponseModels;
 using RestApiRepo.Routes.V1.ApiRoutes;
 using System;
@@ -27,14 +26,21 @@ namespace RestApiRepo.Controllers.V1
         private readonly IPostService _postService;
         private readonly ITagService _tagService;
         private readonly IMapper _mapper;
-        private readonly IPostUriBuilder _uriBuilder;
+        private readonly IPaginationService _paginationService;
+        private readonly IUriBuilderFactory _uriBuilderFactory;
 
-        public PostsController(IPostService postService, ITagService tagService, IMapper mapper, IPostUriBuilder uriBuilder)
+
+        public PostsController(IPostService postService,
+            ITagService tagService,
+            IMapper mapper,
+            IPaginationService paginationService,
+            IUriBuilderFactory uriBuilderFactory)
         {
             _postService = postService;
             _tagService = tagService;
             _mapper = mapper;
-            _uriBuilder = uriBuilder;
+            _paginationService = paginationService;
+            _uriBuilderFactory = uriBuilderFactory;
         }
 
         /// <summary>
@@ -62,12 +68,7 @@ namespace RestApiRepo.Controllers.V1
 
             var posts = await _postService.GetPostsAsync(userFilter, paginationFilter);
             var response = _mapper.Map<List<PostResponse>>(posts);
-            var paginationResponse = new PagedResponse<PostResponse>(response);
-            if (paginationFilter is null || paginationFilter.PageNumber < 0 || paginationFilter.PageSize < 1)
-                return Ok(paginationResponse);
-
-            paginationResponse = PaginationHelper.CreatePaginatedPostResponse(_uriBuilder, paginationFilter, response);
-
+            var paginationResponse = _paginationService.CreatePaginatedResponse(paginationFilter, response);
             return Ok(paginationResponse);
         }
 
@@ -160,7 +161,10 @@ namespace RestApiRepo.Controllers.V1
 
             await _postService.CreatePostAsync(post);
             var response = _mapper.Map<PostResponse>(post);
-            var location = _uriBuilder.GetPostUri(post.Id.ToString());
+            var uriBuilder = _uriBuilderFactory.CreateBuilder<PostResponse>();
+            var request = HttpContext.Request;
+            var baseUri = $"{request.Scheme}://{request.Host.ToUriComponent()}";
+            var location = uriBuilder.GetRecordByIdUrl(baseUri, post.Id.ToString());
 
             return Created(location, new Response<PostResponse>(response));
         }

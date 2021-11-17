@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace RestApiRepo.Domain.Handlers.V1.Comments
 {
-    public class GetCommentByIdHandler : IRequestHandler<GetCommentByIdQuery, GetCommentByIdResponse>
+    public class GetCommentByIdHandler : IRequestHandler<GetCommentByIdQuery, CommentResponse>
     {
         private readonly ICommentService _commentService;
         private readonly IMapper _mapper;
@@ -22,11 +22,11 @@ namespace RestApiRepo.Domain.Handlers.V1.Comments
             _mapper = mapper;
         }
 
-        public async Task<GetCommentByIdResponse> Handle(GetCommentByIdQuery request, CancellationToken cancellationToken)
+        public async Task<CommentResponse> Handle(GetCommentByIdQuery request, CancellationToken cancellationToken)
         {
             var comment = await  _commentService.GetCommentByIdAsync(request.Id);
             //TODO: use automapper
-            return new GetCommentByIdResponse { 
+            return new CommentResponse { 
                 Content = comment.Content,
                 Id = comment.Id,
                 PostId = comment.PostId,

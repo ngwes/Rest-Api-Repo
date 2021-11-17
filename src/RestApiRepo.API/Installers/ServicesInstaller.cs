@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using RestApiRepo.Domain.Services;
-using RestApiRepo.Helpers;
 
 namespace RestApiRepo.Installers
 {
@@ -15,7 +14,7 @@ namespace RestApiRepo.Installers
             services.AddScoped<ITagService, TagService>();
             services.AddScoped<ICommentService, CommentService>();
             services.AddScoped<IIdentityService, IdentityService>();
-            services.AddScoped<IPostUriBuilder, PostUriBuilder>();
+            //services.AddScoped<IPostUriBuilder, PostUriBuilder>();
 
         }
     }

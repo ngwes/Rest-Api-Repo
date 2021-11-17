@@ -7,5 +7,6 @@ namespace RestApiRepo.Domain.Responses.V1.Comments
     public class UpdateCommentResponse
     {
         public bool Success { get; set; }
+        public CommentResponse CommentResponse { get; set; }
     }
 }

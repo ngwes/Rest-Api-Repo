@@ -25,14 +25,15 @@ namespace RestApiRepo.Domain.Handlers.V1.Comments
 
         public async Task<GetPostCommentsResponse> Handle(GetPostCommentsQuery request, CancellationToken cancellationToken)
         {
-            var comments = await _commentService.GetPostCommentsAsync(request.PostId);
+            var comments = await _commentService.GetPostCommentsAsync(request.PostId, request.UserFilter, request.PaginationFilter);
             //TODO: mapping with mapper
             return new GetPostCommentsResponse {
-                Comments = comments.Select(c => new GetCommentByIdResponse { 
+                Comments = comments.Select(c => new PostCommentResponse { 
                    Content = c.Content,
                    Id = c.Id,
                    PostId = c.PostId,
-                   UserId = c.UserId
+                   UserId = c.UserId,
+                   CreateAt = c.CreateAt
                 })
             };
         }

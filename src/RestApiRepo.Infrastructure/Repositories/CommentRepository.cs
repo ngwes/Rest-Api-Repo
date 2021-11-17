@@ -11,7 +11,7 @@ namespace RestApiRepo.Infrastructure.Repositories
 {
     public class CommentRepository : GenericRepository<Comment>, ICommentRepository
     {
-        protected CommentRepository(DataContext context) : base(context)
+        public CommentRepository(DataContext context) : base(context)
         {
         }
 

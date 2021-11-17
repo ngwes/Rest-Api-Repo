@@ -28,7 +28,14 @@ namespace RestApiRepo.Domain.Handlers.V1.Comments
             comment.Content = request.NewContent;
             var result = await _commentService.UpdateCommentAsync(comment);
 
-            return new UpdateCommentResponse { Success = result };
+            var response = new CommentResponse
+            {
+                Content = comment.Content,
+                UserId = comment.UserId,
+                PostId = comment.PostId,
+                Id = comment.Id
+            };
+            return new UpdateCommentResponse { Success = result , CommentResponse = response};
         }
     }
 }

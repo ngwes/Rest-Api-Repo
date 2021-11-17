@@ -9,7 +9,7 @@ namespace RestApiRepo.Domain.Queries.Comments
 {
     public class GetAllCommentsQuery : IRequest<GetAllCommentsResponse>
     {
-        public PaginationFilter paginationFilter { get; set; }
-        public UserFilter userFilter { get; set; }
+        public PaginationFilter PaginationFilter { get; set; }
+        public UserFilter UserFilter { get; set; }
     }
 }

@@ -6,7 +6,7 @@ using System.Text;
 
 namespace RestApiRepo.Domain.Queries.Comments
 {
-    public class GetCommentByIdQuery : IRequest<GetCommentByIdResponse>
+    public class GetCommentByIdQuery : IRequest<CommentResponse>
     {
         public Guid Id { get; set; }
     }
