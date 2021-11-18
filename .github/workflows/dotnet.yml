@@ -20,8 +20,8 @@ jobs:
         with:
           dotnet-version: 3.1.x
       - name: Restore dependencies
-        run: dotnet restore "Rest Api Repo/Rest Api Repo.csproj"
+        run: dotnet restore "src/RestApiRepo.Api/RestApiRepo.Api.csproj"
       - name: Build
-        run: dotnet build  "Rest Api Repo/Rest Api Repo.csproj"
+        run: dotnet build  "src/RestApiRepo.Api/RestApiRepo.Api.csproj"
       - name: Test
-        run: dotnet test  "Restfull_IntegrationTest/RestApi.Integration.Test.csproj" --verbosity normal
+        run: dotnet test  "tests/RestApi.Integration.Test/RestApi.Integration.Test.csproj" --verbosity normal
