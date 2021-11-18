@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using RestApiRepo.Cache;
 using RestApiRepo.Configurations;
+using System;
 
 namespace RestApiRepo.Installers
 {
@@ -12,7 +13,17 @@ namespace RestApiRepo.Installers
         public void InstallServices(IServiceCollection services, IConfiguration configuration, IWebHostEnvironment env)
         {
             var redisSettings = new CacheConfiguration();
-            configuration.Bind(nameof(CacheConfiguration), redisSettings);
+            var isCacheEnabled = Environment.GetEnvironmentVariable("CacheEnabled");
+            var cacheConnectionString = Environment.GetEnvironmentVariable("CacheConnectionString");
+            
+            if(!string.IsNullOrEmpty(isCacheEnabled) && !string.IsNullOrEmpty(cacheConnectionString))
+            {
+                redisSettings.Enabled = bool.Parse(isCacheEnabled);
+                redisSettings.ConnectionString = cacheConnectionString;
+            }
+            else
+                configuration.Bind(nameof(CacheConfiguration), redisSettings);
+
             services.AddSingleton(redisSettings);
 
             if (!redisSettings.Enabled)

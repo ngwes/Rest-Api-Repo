@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using RestApiRepo.Authorization;
 using RestApiRepo.Configurations;
+using System;
 
 namespace RestApiRepo.Installers
 {
@@ -13,7 +14,12 @@ namespace RestApiRepo.Installers
         public void InstallServices(IServiceCollection services, IConfiguration configuration, IWebHostEnvironment env)
         {
             var apiKeySettings = new ApiKeySettings();
-            configuration.Bind(nameof(ApiKeySettings), apiKeySettings);
+            var apiKey = Environment.GetEnvironmentVariable("ApiKey");
+            if (!string.IsNullOrEmpty(apiKey))
+                apiKeySettings.Key = apiKey;
+            else
+                configuration.Bind(nameof(ApiKeySettings), apiKeySettings);
+
             services.AddSingleton(apiKeySettings);
             services.AddControllers()
                 .AddJsonOptions(options =>
