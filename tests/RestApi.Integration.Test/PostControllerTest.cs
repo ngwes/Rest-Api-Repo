@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Restfull_IntegrationTest
+namespace RestApi.Integration.Test
 {
     public class PostControllerTest : IClassFixture<InMemoryApplicationFactory<Startup>>
     {

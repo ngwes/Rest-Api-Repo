@@ -9,7 +9,7 @@ using RestApiRepo.Infrastructure;
 using System;
 using System.IO;
 
-namespace Restfull_IntegrationTest
+namespace RestApi.Integration.Test
 {
 
     public class InMemoryApplicationFactory<TStartup>

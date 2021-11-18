@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using RestApiRepo.Domain.Requests.V1;
 using RestApiRepo.Domain.Requests.V1.Posts;
 using RestApiRepo.Domain.Requests.V1.Users;
 using RestApiRepo.Domain.Responses.V1;
@@ -10,7 +9,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Restfull_IntegrationTest
+namespace RestApi.Integration.Test
 {
     public static class HttpClientExtension
     {

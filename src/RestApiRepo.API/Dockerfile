@@ -7,16 +7,18 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
-COPY ["Rest Api Repo/Rest Api Repo.csproj", "Rest Api Repo/"]
-RUN dotnet restore "Rest Api Repo/Rest Api Repo.csproj"
+COPY ["src/RestApiRepo.Api/RestApiRepo.Api.csproj", "src/RestApiRepo.Api/"]
+COPY ["src/RestApiRepo.Domain/RestApiRepo.Domain.csproj", "RestApiRepo.Domain/"]
+COPY ["src/RestApiRepo.Infrastructure/RestApiRepo.Infrastructure.csproj", "RestApiRepo.Infrastructure/"]
+RUN dotnet restore "src/RestApiRepo.Api/RestApiRepo.Api.csproj"
 COPY . .
-WORKDIR "/src/Rest Api Repo"
-RUN dotnet build "Rest Api Repo.csproj"  -o /app/build
+WORKDIR "/src/RestApiRepo.Api"
+RUN dotnet build "RestApiRepo.Api.csproj"  -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "Rest Api Repo.csproj"  -o /app/publish
+RUN dotnet publish "RestApiRepo.Api.csproj"  -o /app/publish
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Rest Api Repo.dll"]
+ENTRYPOINT ["dotnet", "RestApiRepo.Api.dll"]
