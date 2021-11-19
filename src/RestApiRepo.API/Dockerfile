@@ -1,22 +1,21 @@
 #See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
-FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-buster-slim AS base
+FROM mcr.microsoft.com/dotnet/aspnet:3.1 AS base
 WORKDIR /app
 EXPOSE 80
-EXPOSE 443
 
-FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
+FROM mcr.microsoft.com/dotnet/sdk:3.1 AS build
 WORKDIR /src
-COPY ["src/RestApiRepo.Api/RestApiRepo.Api.csproj", "src/RestApiRepo.Api/"]
-COPY ["src/RestApiRepo.Domain/RestApiRepo.Domain.csproj", "RestApiRepo.Domain/"]
-COPY ["src/RestApiRepo.Infrastructure/RestApiRepo.Infrastructure.csproj", "RestApiRepo.Infrastructure/"]
-RUN dotnet restore "src/RestApiRepo.Api/RestApiRepo.Api.csproj"
+COPY ["src/RestApiRepo.API/RestApiRepo.Api.csproj", "src/RestApiRepo.API/"]
+COPY ["src/RestApiRepo.Domain/RestApiRepo.Domain.csproj", "src/RestApiRepo.Domain/"]
+COPY ["src/RestApiRepo.Infrastructure/RestApiRepo.Infrastructure.csproj", "src/RestApiRepo.Infrastructure/"]
+RUN dotnet restore "src/RestApiRepo.API/RestApiRepo.Api.csproj"
 COPY . .
-WORKDIR "/src/RestApiRepo.Api"
-RUN dotnet build "RestApiRepo.Api.csproj"  -o /app/build
+WORKDIR "/src/src/RestApiRepo.API"
+RUN dotnet build "RestApiRepo.Api.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "RestApiRepo.Api.csproj"  -o /app/publish
+RUN dotnet publish "RestApiRepo.Api.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app

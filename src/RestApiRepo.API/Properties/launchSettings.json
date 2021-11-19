@@ -16,6 +16,13 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "nativeDebugging": true
+    },
+    "Docker": {
+      "commandName": "Docker",
+      "launchBrowser": true,
+      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/swagger",
+      "publishAllPorts": true,
+      "useSSl": false
     }
   }
 }

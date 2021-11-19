@@ -2,21 +2,30 @@ version: '3.4'
 
 services:
   restapirepo:
-    image: ${DOCKER_REGISTRY-}restapirepo
+    image: ${DOCKER_REGISTRY-}restapirepoapi
     build:
       context: .
-      dockerfile: Rest Api Repo/Dockerfile
+      dockerfile: src/RestApiRepo.API/Dockerfile
     env_file:
       - ./api.env
     networks:
       - my_network
     ports:
-      - 5000:5000
-    environment:
-      ApiKey: ${ApiKey}
-      CacheEnabled: ${CacheEnabled}
-      CacheConnectionString: ${CacheConnectionString}
-      ConnectionString: ${ConnectionString}
+      - 8081:80
+    depends_on:
+      - sqldb
+      - cache
+  apigateway:
+    image: envoyproxy/envoy:v1.14.1
+    ports:
+      - "9901:9901"
+      - "10000:10000"
+    networks:
+      - my_network
+    volumes:
+      - ./Envoy/envoy.yaml:/etc/envoy/envoy.yaml
+      - ./Envoy/https.crt:/etc/ssl/certs/https.crt
+      - ./Envoy/key.pem:/etc/ssl/certs/key.pem
   sqldb:
     container_name: sqldb
     image: mcr.microsoft.com/mssql/server:2017-CU8-ubuntu
@@ -37,6 +46,7 @@ services:
       - cache.env
     ports:
       - 6379:6379
+
 networks:
   my_network:
     driver: bridge
