@@ -10,15 +10,12 @@ services:
       - ./api.env
     networks:
       - my_network
-    ports:
-      - 8081:80
     depends_on:
       - sqldb
       - cache
   apigateway:
     image: envoyproxy/envoy:v1.14.1
     ports:
-      - "9901:9901"
       - "10000:10000"
     networks:
       - my_network
@@ -29,8 +26,6 @@ services:
   sqldb:
     container_name: sqldb
     image: mcr.microsoft.com/mssql/server:2017-CU8-ubuntu
-    ports:
-      - "1433:1433"
     networks:
       - my_network
     env_file:
@@ -44,9 +39,6 @@ services:
       - my_network
     env_file:
       - cache.env
-    ports:
-      - 6379:6379
-
 networks:
   my_network:
     driver: bridge

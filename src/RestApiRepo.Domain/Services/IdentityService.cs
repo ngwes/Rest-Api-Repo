@@ -100,7 +100,7 @@ namespace RestApiRepo.Domain.Services
             storedRefreshToken.Used = true;
             _refreshTokenRepository.UpdateToken(storedRefreshToken);
             await _refreshTokenRepository.UnitOfWork.SaveEntitiesAsync();
-
+            
             var user = await _userManager
                 .FindByIdAsync(validateToken.Claims
                 .Single(c => c.Type.Equals("id")).Value);
@@ -149,7 +149,7 @@ namespace RestApiRepo.Domain.Services
                 UserName = email
             };
 
-
+            
             //password here will go through Microsoft password hasher
             var createdUser = await _userManager.CreateAsync(newUser, password);
 

@@ -13,7 +13,7 @@ namespace RestApiRepo.Installers
     {
         public void InstallServices(IServiceCollection services, IConfiguration configuration, IWebHostEnvironment env)
         {
-            services.AddMediatR(typeof(Startup));
+            services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies());
         }
     }
 }
