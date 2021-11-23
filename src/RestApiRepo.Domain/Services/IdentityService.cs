@@ -16,6 +16,7 @@ namespace RestApiRepo.Domain.Services
     public class IdentityService : IIdentityService
     {
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly IEmailService _emailService;
         private readonly AuthenticationSettings _jwtSettings;
         private readonly TokenValidationParameters _tokenValidationParameters;
         private readonly IRefreshTokenRepository _refreshTokenRepository;
@@ -23,12 +24,13 @@ namespace RestApiRepo.Domain.Services
         public IdentityService(UserManager<IdentityUser> userManager,
             AuthenticationSettings jwtSettings,
             TokenValidationParameters tokenValidationParameters,
-             IRefreshTokenRepository refreshTokenRepository)
+             IRefreshTokenRepository refreshTokenRepository, IEmailService emailService)
         {
             _userManager = userManager;
             _jwtSettings = jwtSettings;
             _tokenValidationParameters = tokenValidationParameters;
             _refreshTokenRepository = refreshTokenRepository;
+            _emailService = emailService;
         }
 
         public async Task<AuthenticationResult> LoginAsync(string email, string password)
@@ -149,8 +151,6 @@ namespace RestApiRepo.Domain.Services
                 UserName = email
             };
 
-            
-            //password here will go through Microsoft password hasher
             var createdUser = await _userManager.CreateAsync(newUser, password);
 
             if (!createdUser.Succeeded)
@@ -162,6 +162,13 @@ namespace RestApiRepo.Domain.Services
             }
             //await _userManager.AddClaimAsync(newUser, new Claim("tag.view", "true"));
             await _userManager.AddToRoleAsync(newUser, "Poster");
+            /* If you want to send an email after registration, please, uncomment this
+             * _emailService.SendEmailMessage(new EmailMessage
+            {
+                To = new List<string> { newUser.Email },
+                Subject = "Successfull Registration",
+                Body = "Your account has been successfully registered"
+            });*/
             return await GenerateAuthenticationResultForUserAsync(newUser);
         }
 

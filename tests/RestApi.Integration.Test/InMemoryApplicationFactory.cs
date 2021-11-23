@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using RabbitMQ.Client;
 using RestApiRepo.Infrastructure;
 using System;
 using System.IO;
@@ -35,6 +37,8 @@ namespace RestApi.Integration.Test
                 .UseSolutionRelativeContentRoot("")
                 .ConfigureTestServices(services =>
                 {
+                   
+
                     var options = new DbContextOptionsBuilder<DataContext>()
                     .UseInMemoryDatabase(Guid.NewGuid().ToString())
                     .Options;
@@ -44,9 +48,11 @@ namespace RestApi.Integration.Test
                     var scopedServices = scope.ServiceProvider;
                     CreateTestAdminUser(scopedServices);
                     EnsureDataCreated(scopedServices);
+
                 })
                 .UseConfiguration(config);
         }
+
 
         private void EnsureDataCreated(IServiceProvider scopedServices)
         {

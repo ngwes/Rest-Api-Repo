@@ -23,6 +23,7 @@
     <DockerServiceName>restapirepo</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>
+    <None Include="email_service.env" />
     <None Include="cache.env" />
     <None Include="api.env" />
     <None Include="db.env" />

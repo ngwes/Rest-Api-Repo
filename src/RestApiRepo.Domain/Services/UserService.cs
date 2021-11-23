@@ -6,12 +6,6 @@ namespace RestApiRepo.Domain.Services
 {
     public class UserService : IUserService
     {
-        //private readonly DataContext _context;
-
-        //public UserService(DataContext context)
-        //{
-        //    _context = context;
-        //}
         private readonly IUserRepository _userRepository;
 
         public UserService(IUserRepository userRepository)

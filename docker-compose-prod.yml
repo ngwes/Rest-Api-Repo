@@ -13,9 +13,22 @@ services:
     depends_on:
       - sqldb
       - cache
+      - message_queue
+  email_service:
+    image: ${DOCKER_REGISTRY-}email_service
+    build:
+      context: .
+      dockerfile: src/EmailService/Dockerfile
+    env_file:
+      - ./email_service.env
+    networks:
+      - my_network
+    depends_on:
+      - message_queue
   apigateway:
     image: envoyproxy/envoy:v1.14.1
     ports:
+      - "9901:9901"
       - "10000:10000"
     networks:
       - my_network
@@ -32,6 +45,10 @@ services:
       - ./db.env
     volumes:
       - .\data:/var/opt/mssql/data
+  message_queue:
+    image: rabbitmq:3-management
+    networks:
+      - my_network
   cache:
     container_name: cachedb
     image: redis:alpine
@@ -39,6 +56,7 @@ services:
       - my_network
     env_file:
       - cache.env
+
 networks:
   my_network:
     driver: bridge
