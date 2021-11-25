@@ -14,6 +14,7 @@ namespace RestApiRepo.Installers
             services.AddScoped<ITagService, TagService>();
             services.AddScoped<ICommentService, CommentService>();
             services.AddScoped<IIdentityService, IdentityService>();
+            services.AddScoped<IEmailService, EmailService>();
             //services.AddScoped<IPostUriBuilder, PostUriBuilder>();
 
         }
