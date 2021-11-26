@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using RestApiRepo.Domain.Entities;
 using RestApiRepo.Domain.Requests.V1;
+using RestApiRepo.Domain.Requests.V1.Comments;
 using RestApiRepo.Domain.Requests.V1.Posts;
 
 namespace RestApiRepo.Domain.MappingProfiles
@@ -10,7 +11,8 @@ namespace RestApiRepo.Domain.MappingProfiles
         public RequestToDomainProfile()
         {
             CreateMap<PaginationQuery, PaginationFilter>();
-            CreateMap<GetAllPostsQuery, UserFilter>();
+            CreateMap<GetAllPostsUserFilter, UserFilter>();
+            CreateMap<GetAllCommentsUserFilterQuery, UserFilter>();
         }
     }
 }

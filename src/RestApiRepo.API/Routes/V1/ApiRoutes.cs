@@ -34,6 +34,8 @@ namespace RestApiRepo.Routes.V1.ApiRoutes
         {
             public const string TagsBase = Base + "/tags";
             public const string GetAll = "";
+            public const string GetAllWitApiKey = "apiKey";
+            public const string GetAllWithPolicy = "policy";
             public const string Get = "{tagId}";
             public const string Create = "";
             public const string Update = "{tagId}";

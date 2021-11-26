@@ -61,7 +61,7 @@ namespace RestApiRepo.Controllers.V1
         /// <returns></returns>
         [HttpGet(ApiRoutes.Posts.GetAll)]
         [Cache(10)]
-        public async Task<IActionResult> GetAllAsync([FromQuery] GetAllPostsQuery filterQuery, [FromQuery] PaginationQuery query)
+        public async Task<IActionResult> GetAllAsync([FromQuery] GetAllPostsUserFilter filterQuery, [FromQuery] PaginationQuery query)
         {
             var paginationFilter = _mapper.Map<PaginationFilter>(query);
             var userFilter = _mapper.Map<UserFilter>(filterQuery);

@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace RestApiRepo.Domain.Requests.V1.Posts
+namespace RestApiRepo.Domain.Requests.V1.Comments
 {
-    public class GetAllPostsUserFilter
+    public class GetAllCommentsUserFilterQuery
     {
         public string UserId { get; set; }
     }
