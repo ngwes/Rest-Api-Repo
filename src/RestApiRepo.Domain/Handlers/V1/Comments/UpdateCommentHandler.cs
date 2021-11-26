@@ -21,7 +21,7 @@ namespace RestApiRepo.Domain.Handlers.V1.Comments
 
         public async Task<UpdateCommentResponse> Handle(UpdateCommentCommand request, CancellationToken cancellationToken)
         {
-            if (await _commentService.UserOwnsComment(request.Id, request.RequestingUserId))
+            if (!await _commentService.UserOwnsComment(request.Id, request.RequestingUserId))
                 return new UpdateCommentResponse { Success = false };
 
             var comment = await _commentService.GetCommentByIdAsync(request.Id);

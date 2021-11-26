@@ -16,10 +16,10 @@ namespace RestApiRepo.SDK
         Task<ApiResponse<PagedResponse<PostResponse>>> GetAllPostsAsync([AliasAs("pageSize")]int pageSize, [AliasAs("pageNumber")]int pageNumber, [AliasAs("userId")] string userId = null);
 
         [Get("/api/v1/posts/{postId}")]
-        Task<ApiResponse<PostResponse>> GetPostAsync(Guid postId);
+        Task<ApiResponse<Response<PostResponse>>> GetPostAsync(Guid postId);
 
         [Post("/api/v1/posts")]
-        Task<ApiResponse<PostResponse>> CreatePostAsync([Body]PostRequest request);
+        Task<ApiResponse<Response<PostResponse>>> CreatePostAsync([Body]PostRequest request);
 
         [Put("/api/v1/posts/{postId}")]
         Task<ApiResponse<string>> UpdatePostAsync(Guid postId, [Body] UpdatePostRequest request);

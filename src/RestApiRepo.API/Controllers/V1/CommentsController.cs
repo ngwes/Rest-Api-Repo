@@ -66,7 +66,7 @@ namespace RestApiRepo.Controllers.V1
 
         [Authorize(Roles = "Admin")]
         [HttpGet(ApiRoutes.Comments.GetAll)]
-        public async Task<IActionResult> GetAllComments([FromQuery] GetAllPostsQuery filterQuery, [FromQuery] PaginationQuery query)
+        public async Task<IActionResult> GetAllComments([FromQuery] GetAllCommentsUserFilterQuery filterQuery, [FromQuery] PaginationQuery query)
         {
             var paginationFilter = _mapper.Map<PaginationFilter>(query);
             var userFilter = _mapper.Map<UserFilter>(filterQuery);
@@ -115,7 +115,7 @@ namespace RestApiRepo.Controllers.V1
         }
 
         [HttpGet(ApiRoutes.Comments.GetPostComments)]
-        public async Task<IActionResult> GetPostComments([FromRoute] Guid postId, [FromQuery] GetAllPostsQuery filterQuery, [FromQuery] PaginationQuery query)
+        public async Task<IActionResult> GetPostComments([FromRoute] Guid postId, [FromQuery] GetAllPostsUserFilter filterQuery, [FromQuery] PaginationQuery query)
         {
             var paginationFilter = _mapper.Map<PaginationFilter>(query);
             var userFilter = _mapper.Map<UserFilter>(filterQuery);

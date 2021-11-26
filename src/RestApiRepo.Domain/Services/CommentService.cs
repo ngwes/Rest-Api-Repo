@@ -43,14 +43,14 @@ namespace RestApiRepo.Domain.Services
         {
             var skip = paginationFilter.PageNumber <= 1 ? 0 : paginationFilter.PageNumber * paginationFilter.PageSize;
 
-            IEnumerable<Comment> posts;
+            IEnumerable<Comment> comments;
             if (!string.IsNullOrEmpty(userFilter?.UserId))
-                posts = await _commentRepository.GetAllCommentsAsync(x => x.UserId.Equals(userFilter.UserId), null, "User,Post", skip, paginationFilter.PageSize);
+                comments = await _commentRepository.GetAllCommentsAsync(x => x.UserId.Equals(userFilter.UserId), null, "User,Post", skip, paginationFilter.PageSize);
             else
             {
-                posts = await _commentRepository.GetAllCommentsAsync(null, null, "User,Post", skip, paginationFilter.PageSize);
+                comments = await _commentRepository.GetAllCommentsAsync(null, null, "User,Post", skip, paginationFilter.PageSize);
             }
-            return posts;
+            return comments;
         }
 
         public async Task<IEnumerable<Comment>> GetPostCommentsAsync(Guid postId, UserFilter userFilter, PaginationFilter paginationFilter = null)
