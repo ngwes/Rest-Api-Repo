@@ -30,9 +30,12 @@ static_resources:
                           route:
                             cluster: restapi_service
                         - match:
+                            prefix: "/health"
+                          route:
+                            cluster: restapi_service
+                        - match:
                             prefix: "/swagger"
                           route:
-                            prefix_rewrite: "/swagger"
                             cluster: restapi_service
                 http_filters:
                   - name: envoy.filters.http.router

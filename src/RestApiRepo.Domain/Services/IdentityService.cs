@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using MediatR;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using RestApiRepo.Domain.Configurations;
 using RestApiRepo.Domain.Entities;
+using RestApiRepo.Domain.InProcessNotifications;
 using RestApiRepo.Domain.Repositories;
 using System;
 using System.Collections.Generic;
@@ -16,21 +18,23 @@ namespace RestApiRepo.Domain.Services
     public class IdentityService : IIdentityService
     {
         private readonly UserManager<IdentityUser> _userManager;
-        private readonly IEmailService _emailService;
+        //private readonly IEmailService _emailService;
         private readonly AuthenticationSettings _jwtSettings;
         private readonly TokenValidationParameters _tokenValidationParameters;
         private readonly IRefreshTokenRepository _refreshTokenRepository;
+        private readonly IMediator _mediator;
 
         public IdentityService(UserManager<IdentityUser> userManager,
             AuthenticationSettings jwtSettings,
             TokenValidationParameters tokenValidationParameters,
-             IRefreshTokenRepository refreshTokenRepository, IEmailService emailService)
+             IRefreshTokenRepository refreshTokenRepository/*, IEmailService emailService*/, IMediator mediator)
         {
             _userManager = userManager;
             _jwtSettings = jwtSettings;
             _tokenValidationParameters = tokenValidationParameters;
             _refreshTokenRepository = refreshTokenRepository;
-            _emailService = emailService;
+            _mediator = mediator;
+            //_emailService = emailService;
         }
 
         public async Task<AuthenticationResult> LoginAsync(string email, string password)
@@ -162,13 +166,11 @@ namespace RestApiRepo.Domain.Services
             }
             //await _userManager.AddClaimAsync(newUser, new Claim("tag.view", "true"));
             await _userManager.AddToRoleAsync(newUser, "Poster");
-            /* If you want to send an email after registration, please, uncomment this
-             * _emailService.SendEmailMessage(new EmailMessage
-            {
-                To = new List<string> { newUser.Email },
-                Subject = "Successfull Registration",
-                Body = "Your account has been successfully registered"
-            });*/
+            await _mediator.Publish(new UserRegisteredEvent { 
+                UserEmail = newUser.Email,
+                UserId = newUser.Id
+            });
+           
             return await GenerateAuthenticationResultForUserAsync(newUser);
         }
 
