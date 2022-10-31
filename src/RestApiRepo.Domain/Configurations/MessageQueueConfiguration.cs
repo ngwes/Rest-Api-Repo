@@ -9,6 +9,7 @@ namespace RestApiRepo.Domain.Configurations
         public string HostName { get; set; }
         public string User { get; set; }
         public string Password { get; set; }
+        public string EmailQueueName { get; set; }
         public string QueueName { get; set; }
     }
 }

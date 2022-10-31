@@ -26,7 +26,7 @@ namespace RestApiRepo.Infrastructure.Services
                 var connection = _connectionFactory.CreateConnection();
 
                 using var channel = connection.CreateModel();
-                channel.QueueDeclare(queue: _messageQueueConfiguration.QueueName, true, false);
+                channel.QueueDeclare(queue: _messageQueueConfiguration.EmailQueueName, true, false);
 
                 var body = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(message));
 

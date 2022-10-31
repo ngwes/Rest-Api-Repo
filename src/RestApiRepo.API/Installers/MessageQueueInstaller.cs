@@ -19,9 +19,11 @@ namespace RestApiRepo.Installers
             var queueUser = Environment.GetEnvironmentVariable("QueueUser");
             var queuePassword = Environment.GetEnvironmentVariable("QueuePassword");
             var queueName = Environment.GetEnvironmentVariable("QueueName");
+            var emailQueueName = Environment.GetEnvironmentVariable("EmailQueueName");
             if (string.IsNullOrEmpty(queueHostname) ||
                 string.IsNullOrEmpty(queueUser) ||
                 string.IsNullOrEmpty(queuePassword) ||
+                string.IsNullOrEmpty(emailQueueName) ||
                 string.IsNullOrEmpty(queueName))
             {
                 configuration.Bind("MessageQueue", config);
@@ -32,6 +34,7 @@ namespace RestApiRepo.Installers
                 config.Password = queuePassword;
                 config.User = queueUser;
                 config.QueueName = queueName;
+                config.EmailQueueName = emailQueueName;
             }
 
             services.AddSingleton(config);

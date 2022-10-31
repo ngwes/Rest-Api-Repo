@@ -18,7 +18,6 @@ namespace RestApiRepo.Domain.Services
     public class IdentityService : IIdentityService
     {
         private readonly UserManager<IdentityUser> _userManager;
-        //private readonly IEmailService _emailService;
         private readonly AuthenticationSettings _jwtSettings;
         private readonly TokenValidationParameters _tokenValidationParameters;
         private readonly IRefreshTokenRepository _refreshTokenRepository;
@@ -27,14 +26,13 @@ namespace RestApiRepo.Domain.Services
         public IdentityService(UserManager<IdentityUser> userManager,
             AuthenticationSettings jwtSettings,
             TokenValidationParameters tokenValidationParameters,
-             IRefreshTokenRepository refreshTokenRepository/*, IEmailService emailService*/, IMediator mediator)
+             IRefreshTokenRepository refreshTokenRepository, IMediator mediator)
         {
             _userManager = userManager;
             _jwtSettings = jwtSettings;
             _tokenValidationParameters = tokenValidationParameters;
             _refreshTokenRepository = refreshTokenRepository;
             _mediator = mediator;
-            //_emailService = emailService;
         }
 
         public async Task<AuthenticationResult> LoginAsync(string email, string password)
